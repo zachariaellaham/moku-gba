@@ -1,0 +1,50 @@
+# Boot: the ROM comes up, the test block is alive and the title screen appears in under 2 seconds.
+symbols build/moku.sym
+echo 00_boot: waiting for SceneId::TITLE
+
+# scene (offset 8) must become TITLE (1) within 120 frames (< 2 s at 60 fps)
+wait8 $g_moku_test+8 1 120
+
+# magic 'MOKU'
+assert32 $g_moku_test+0 0x554B4F4D
+
+# the heartbeat (offset 4) moves every frame
+waitchange32 $g_moku_test+4 5
+waitchange32 $g_moku_test+4 5
+
+# defaults after a boot with no save: EN, CLASSIC, SEN, JUICY, 2xA, first menu item
+assert8 $g_moku_test+10 0
+assert8 $g_moku_test+11 0
+assert8 $g_moku_test+12 0
+assert8 $g_moku_test+13 1
+assert8 $g_moku_test+14 0
+assert8 $g_moku_test+126 0
+
+frames 30
+screenshot tests/rom/out/title.png
+
+# menu navigation: DOWN moves the highlight, UP wraps back
+press DOWN 2 6
+assert8 $g_moku_test+126 1
+press DOWN 2 6
+assert8 $g_moku_test+126 2
+press UP 2 6
+assert8 $g_moku_test+126 1
+press UP 2 6
+press UP 2 6
+assert8 $g_moku_test+126 2
+screenshot tests/rom/out/title_menu.png
+
+# nothing was dropped while idling on the title
+# The rule is about the human's turn: while the player is looking at the board, no frame
+# may be missed. Loading a scene, and the AI's own turn on a 19x19 board, are allowed to cost a
+# few - they are reported below, not asserted.
+wait8 $g_moku_test+30 0 900
+write32 $g_moku_test+72 9
+wait32 $g_moku_test+72 0 20
+frames 6
+frames 150
+assert16 $g_moku_test+38 0
+read32 $g_moku_test+84
+read32 $g_moku_test+84
+stats

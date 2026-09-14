@@ -1,0 +1,77 @@
+# The play screen itself: board, HUD, cursor, ghost stone, pause menu, hint, panels.
+symbols build/moku.sym
+wait8 $g_moku_test+8 1 120
+frames 20
+write32 $g_moku_test+72 8
+wait32 $g_moku_test+72 0 20
+frames 6
+
+# TCMD_LOAD_MISSION(2) = mission 7 (Last Breath, the mockup's own screen)
+write32 $g_moku_test+76 7
+write32 $g_moku_test+72 2
+wait32 $g_moku_test+72 0 30
+frames 6
+assert8 $g_moku_test+8 5
+assert8 $g_moku_test+26 7
+# skip the tutor line so the board is visible
+write32 $g_moku_test+72 12
+wait32 $g_moku_test+72 0 20
+frames 6
+frames 20
+screenshot tests/rom/out/11_play_mission7.png
+
+# the cursor moves and wraps
+read8 $g_moku_test+18
+press RIGHT 2 6
+press DOWN 2 6
+frames 4
+screenshot tests/rom/out/11_cursor.png
+
+# A shows the ghost stone (confirm mode is two presses by default)
+press A 2 8
+assert8 $g_moku_test+127 1
+screenshot tests/rom/out/11_ghost.png
+press B 2 6
+assert8 $g_moku_test+127 0
+
+# L cycles the HUD panels: info -> moves -> estimate
+assert8 $g_moku_test+125 0
+press L 2 6
+assert8 $g_moku_test+125 1
+screenshot tests/rom/out/11_panel_moves.png
+press L 2 6
+assert8 $g_moku_test+125 2
+frames 8
+screenshot tests/rom/out/11_panel_estimate.png
+press L 2 6
+assert8 $g_moku_test+125 0
+
+# SELECT asks for a hint
+press SELECT 2 10
+frames 6
+screenshot tests/rom/out/11_hint.png
+
+# START opens the pause menu, and every entry is reachable
+press START 2 8
+assert8 $g_moku_test+9 5
+screenshot tests/rom/out/11_pause.png
+press DOWN 2 4
+press DOWN 2 4
+press DOWN 2 4
+press DOWN 2 4
+frames 4
+screenshot tests/rom/out/11_pause_estimate.png
+press START 2 8
+assert8 $g_moku_test+9 0
+
+# The rule is about the human's turn: while the player is looking at the board, no frame
+# may be missed. Loading a scene, and the AI's own turn on a 19x19 board, are allowed to cost a
+# few - they are reported below, not asserted.
+wait8 $g_moku_test+30 0 900
+write32 $g_moku_test+72 9
+wait32 $g_moku_test+72 0 20
+frames 6
+frames 150
+assert16 $g_moku_test+38 0
+read32 $g_moku_test+84
+stats

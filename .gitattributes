@@ -1,0 +1,19 @@
+# Text files keep LF in the repository whatever the checkout platform does.
+* text=auto eol=lf
+
+# Generated assets and build output are binary: never touch their bytes, never diff them.
+*.bmp   binary
+*.png   binary
+*.wav   binary
+*.mod   binary
+*.gba   binary
+*.mp4   binary
+
+# Generated sources: real code, but nobody wants them in a diff or a language breakdown.
+src/ai/patterns_table.cpp        linguist-generated=true
+src/game/render/skin_data.cpp    linguist-generated=true
+src/game/missions_data.cpp       linguist-generated=true
+include/moku_fonts.h             linguist-generated=true
+include/moku_font_widths.h       linguist-generated=true
+tests/host/third_party/*         linguist-vendored=true
+tests/rom/screenshots/*          linguist-generated=true

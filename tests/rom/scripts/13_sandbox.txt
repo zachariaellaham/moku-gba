@@ -1,0 +1,95 @@
+# A sandbox game against each opponent, played to the end on 7x7, plus hot seat.
+# TCMD_START_SANDBOX arg: size index (0=7,1=9,2=13,3=19) | player_black<<4 | level<<8 |
+#                         handicap<<12 | rules<<16 | komi_x2<<20 | hotseat<<28
+symbols build/moku.sym
+wait8 $g_moku_test+8 1 120
+frames 20
+write32 $g_moku_test+72 8
+wait32 $g_moku_test+72 0 20
+frames 6
+
+echo 7x7 vs PEBBLE (VERY EASY), area scoring
+# size 0 (7x7) | black | level 0 | komi 15 -> 0 | 0x10 | 0 | 15<<20
+write32 $g_moku_test+76 0xF00010
+write32 $g_moku_test+72 3
+wait32 $g_moku_test+72 0 30
+frames 6
+assert8 $g_moku_test+8 5
+assert8 $g_moku_test+15 7
+frames 10
+screenshot tests/rom/out/13_sandbox_7.png
+
+echo 9x9 vs SPROUT (EASY), territory scoring
+write32 $g_moku_test+76 0xD10111
+write32 $g_moku_test+72 3
+wait32 $g_moku_test+72 0 30
+frames 6
+assert8 $g_moku_test+15 9
+assert8 $g_moku_test+29 1
+frames 10
+screenshot tests/rom/out/13_sandbox_9_easy.png
+
+echo 13x13 vs KOAN (NORMAL)
+write32 $g_moku_test+76 0xF00212
+write32 $g_moku_test+72 3
+wait32 $g_moku_test+72 0 30
+frames 6
+assert8 $g_moku_test+15 13
+assert8 $g_moku_test+29 2
+frames 30
+screenshot tests/rom/out/13_sandbox_13.png
+
+echo 19x19 vs EMBER (HARD) with a 3 stone handicap
+write32 $g_moku_test+76 0xF03313
+write32 $g_moku_test+72 3
+wait32 $g_moku_test+72 0 30
+frames 6
+assert8 $g_moku_test+15 19
+assert8 $g_moku_test+29 3
+frames 40
+screenshot tests/rom/out/13_sandbox_19_handicap.png
+
+echo hot seat on 9x9
+write32 $g_moku_test+76 0x10000011
+write32 $g_moku_test+72 3
+wait32 $g_moku_test+72 0 30
+frames 6
+assert8 $g_moku_test+15 9
+assert8 $g_moku_test+140 255
+frames 10
+screenshot tests/rom/out/13_hotseat.png
+
+echo a whole 7x7 game, played by passing until it ends (hot seat: both passes are ours)
+write32 $g_moku_test+76 0x10000000
+write32 $g_moku_test+72 3
+wait32 $g_moku_test+72 0 30
+frames 6
+# both sides pass: the game reaches the marking phase
+write32 $g_moku_test+72 17
+wait32 $g_moku_test+72 0 40
+frames 6
+frames 120
+write32 $g_moku_test+72 17
+wait32 $g_moku_test+72 0 40
+frames 6
+frames 120
+# phase 1 = MARK_DEAD
+assert8 $g_moku_test+17 1
+screenshot tests/rom/out/13_mark_dead.png
+# START finishes the marking and scores
+press START 2 30
+frames 60
+assert8 $g_moku_test+8 10
+screenshot tests/rom/out/13_score.png
+
+# The rule is about the human's turn: while the player is looking at the board, no frame
+# may be missed. Loading a scene, and the AI's own turn on a 19x19 board, are allowed to cost a
+# few - they are reported below, not asserted.
+wait8 $g_moku_test+30 0 900
+write32 $g_moku_test+72 9
+wait32 $g_moku_test+72 0 20
+frames 6
+frames 150
+assert16 $g_moku_test+38 0
+read32 $g_moku_test+84
+stats

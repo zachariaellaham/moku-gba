@@ -1,0 +1,197 @@
+# MOKU - the trailer, recorded as one continuous take so the music never jumps a cut.
+# Run it with tools/make_trailer.sh, which encodes the frames and the sound into dist/moku-trailer.mp4.
+#
+# Everything here is the real game: the cursor moves because a D-pad is held, the stones land
+# because A was pressed twice, and mission one is solved by hand.
+symbols build/moku.sym
+wait8 $g_moku_test+8 1 120
+frames 40
+
+# a clean slate, everything unlocked, CLASSIC and English
+write32 $g_moku_test+72 14
+wait32 $g_moku_test+72 0 30
+frames 6
+reset
+wait8 $g_moku_test+8 1 180
+write32 $g_moku_test+72 8
+wait32 $g_moku_test+72 0 20
+frames 6
+write32 $g_moku_test+76 0
+write32 $g_moku_test+72 4
+wait32 $g_moku_test+72 0 20
+write32 $g_moku_test+76 0
+write32 $g_moku_test+72 5
+wait32 $g_moku_test+72 0 20
+write32 $g_moku_test+76 0
+write32 $g_moku_test+72 6
+wait32 $g_moku_test+72 0 20
+frames 30
+
+record_start tools/trailer/frames 32768
+
+echo --- the title
+frames 150
+press DOWN 2 26
+press DOWN 2 26
+press UP 2 26
+press UP 2 20
+
+echo --- pick a file
+press A 2 70
+frames 40
+
+echo --- the campaign map
+press A 2 60
+frames 70
+press RIGHT 2 26
+press RIGHT 2 26
+frames 30
+press LEFT 2 22
+press LEFT 2 40
+
+echo --- the briefing: Master Sen
+press A 2 150
+frames 60
+press A 2 30
+
+echo --- mission one, played by hand
+frames 50
+press A 2 110
+frames 40
+write32 $g_moku_test+72 12
+wait32 $g_moku_test+72 0 20
+frames 40
+
+echo --- the pause menu
+press START 2 110
+press B 2 40
+
+# the cursor starts on the first mark: A shows the ghost stone, A again commits it
+press A 2 30
+press A 2 74
+press RIGHT 2 16
+press DOWN 2 16
+press DOWN 2 30
+press A 2 30
+press A 2 74
+press RIGHT 2 16
+press DOWN 2 16
+press DOWN 2 30
+press A 2 30
+press A 2 100
+
+echo --- cleared, with the rank stamp
+press A 2 60
+press A 2 170
+frames 60
+
+echo --- the same game in PUP: a capture with all the juice
+write32 $g_moku_test+76 1
+write32 $g_moku_test+72 5
+wait32 $g_moku_test+72 0 20
+write32 $g_moku_test+76 1
+write32 $g_moku_test+72 6
+wait32 $g_moku_test+72 0 20
+write32 $g_moku_test+76 7
+write32 $g_moku_test+72 2
+wait32 $g_moku_test+72 0 40
+frames 40
+write32 $g_moku_test+72 12
+wait32 $g_moku_test+72 0 20
+frames 50
+write32 $g_moku_test+76 1285
+write32 $g_moku_test+72 16
+wait32 $g_moku_test+72 0 60
+frames 170
+
+echo --- and in DINO
+write32 $g_moku_test+76 2
+write32 $g_moku_test+72 5
+wait32 $g_moku_test+72 0 20
+write32 $g_moku_test+76 2
+write32 $g_moku_test+72 6
+wait32 $g_moku_test+72 0 20
+write32 $g_moku_test+76 7
+write32 $g_moku_test+72 2
+wait32 $g_moku_test+72 0 40
+frames 40
+write32 $g_moku_test+72 12
+wait32 $g_moku_test+72 0 20
+frames 50
+write32 $g_moku_test+76 1285
+write32 $g_moku_test+72 16
+wait32 $g_moku_test+72 0 60
+frames 170
+
+echo --- five opponents, one per level
+write32 $g_moku_test+76 0
+write32 $g_moku_test+72 5
+wait32 $g_moku_test+72 0 20
+write32 $g_moku_test+76 0
+write32 $g_moku_test+72 6
+wait32 $g_moku_test+72 0 20
+write32 $g_moku_test+76 8
+write32 $g_moku_test+72 18
+wait32 $g_moku_test+72 0 30
+frames 70
+press RIGHT 2 55
+press RIGHT 2 55
+press RIGHT 2 55
+press RIGHT 2 70
+
+echo --- nineteen by nineteen, against the old master
+write32 $g_moku_test+76 0xF00413
+write32 $g_moku_test+72 3
+wait32 $g_moku_test+72 0 30
+frames 60
+press RIGHT 2 10
+press RIGHT 2 10
+press DOWN 2 10
+press DOWN 2 20
+write32 $g_moku_test+76 0x0303
+write32 $g_moku_test+72 16
+wait32 $g_moku_test+72 0 20
+frames 170
+
+echo --- what it is thinking, on L+R+SELECT
+# a two-frame press can fall between two game frames while a 19x19 search is running, so hold it
+hold L
+hold R
+press SELECT 12 30
+release L
+release R
+frames 170
+hold L
+hold R
+press SELECT 12 20
+release L
+release R
+frames 20
+
+echo --- et en francais
+write32 $g_moku_test+76 1
+write32 $g_moku_test+72 4
+wait32 $g_moku_test+72 0 20
+frames 30
+write32 $g_moku_test+76 9
+write32 $g_moku_test+72 18
+wait32 $g_moku_test+72 0 30
+frames 60
+press DOWN 2 24
+press DOWN 2 24
+press DOWN 2 40
+write32 $g_moku_test+76 13
+write32 $g_moku_test+72 2
+wait32 $g_moku_test+72 0 40
+frames 120
+
+echo --- back to the title
+write32 $g_moku_test+76 0
+write32 $g_moku_test+72 4
+wait32 $g_moku_test+72 0 20
+write32 $g_moku_test+72 1
+wait32 $g_moku_test+72 0 30
+frames 200
+
+record_stop
+stats

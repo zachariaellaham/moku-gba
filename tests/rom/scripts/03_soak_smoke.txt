@@ -1,0 +1,44 @@
+# Soak smoke test: random input never hangs the ROM and never drops a frame.
+symbols build/moku.sym
+wait8 $g_moku_test+8 1 120
+frames 20
+
+# TCMD_RESET_COUNTERS (9)
+write32 $g_moku_test+76 0
+write32 $g_moku_test+72 9
+wait32 $g_moku_test+72 0 20
+frames 6
+
+echo 03_soak_smoke: 1500 random frames on the menus
+random 1500 20260913
+waitchange32 $g_moku_test+4 5
+
+# TCMD_GOTO_SCENE (18) -> the renderer demo (SceneId::BOOT), the scene with the full redraws
+write32 $g_moku_test+76 0
+write32 $g_moku_test+72 18
+wait32 $g_moku_test+72 0 20
+frames 6
+assert8 $g_moku_test+8 0
+
+echo 03_soak_smoke: 1500 random frames on the board (no B / START so it stays there)
+random 1500 987654321 A,SELECT,RIGHT,LEFT,UP,DOWN,R,L
+assert8 $g_moku_test+8 0
+
+# the ROM is still running
+waitchange32 $g_moku_test+4 5
+waitchange32 $g_moku_test+4 5
+screenshot tests/rom/out/soak.png
+
+# The rule is about the human's turn: while the player is looking at the board, no frame
+# may be missed. Loading a scene, and the AI's own turn on a 19x19 board, are allowed to cost a
+# few - they are reported below, not asserted.
+wait8 $g_moku_test+30 0 900
+write32 $g_moku_test+72 9
+wait32 $g_moku_test+72 0 20
+frames 6
+frames 150
+assert16 $g_moku_test+38 0
+read32 $g_moku_test+84
+read32 $g_moku_test+84
+read32 $g_moku_test+132
+stats

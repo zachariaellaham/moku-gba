@@ -1,0 +1,121 @@
+# The juice fires in PUP and DINO and stays quiet in CLASSIC.
+# event_flags (offset 31): bit1 banner, bit2 helper pop-in, bit3 shake, bit4 tint, bit5 particles.
+symbols build/moku.sym
+wait8 $g_moku_test+8 1 120
+frames 20
+write32 $g_moku_test+72 8
+wait32 $g_moku_test+72 0 20
+frames 6
+
+echo PUP: a capture must raise a banner and particles
+write32 $g_moku_test+76 1
+write32 $g_moku_test+72 5
+wait32 $g_moku_test+72 0 20
+frames 6
+write32 $g_moku_test+76 1
+write32 $g_moku_test+72 7
+wait32 $g_moku_test+72 0 20
+frames 6
+# mission 3 (Take It): one move captures
+write32 $g_moku_test+76 3
+write32 $g_moku_test+72 2
+wait32 $g_moku_test+72 0 30
+frames 6
+write32 $g_moku_test+72 12
+wait32 $g_moku_test+72 0 20
+frames 6
+frames 10
+# play the capture at (3,4)
+write32 $g_moku_test+76 0x0403
+write32 $g_moku_test+72 16
+wait32 $g_moku_test+72 0 40
+frames 6
+frames 4
+screenshot tests/rom/out/15_pup_capture.png
+read8 $g_moku_test+31
+# bit1 (banner) must be set
+waitne8 $g_moku_test+31 0 30
+
+echo CLASSIC: the same capture is sober - no shake, no particles, no tint
+write32 $g_moku_test+76 0
+write32 $g_moku_test+72 5
+wait32 $g_moku_test+72 0 20
+frames 6
+write32 $g_moku_test+76 3
+write32 $g_moku_test+72 2
+wait32 $g_moku_test+72 0 30
+frames 6
+write32 $g_moku_test+72 12
+wait32 $g_moku_test+72 0 20
+frames 6
+frames 10
+write32 $g_moku_test+76 0x0403
+write32 $g_moku_test+72 16
+wait32 $g_moku_test+72 0 40
+frames 6
+frames 4
+screenshot tests/rom/out/15_classic_capture.png
+read8 $g_moku_test+31
+
+echo DINO: an atari banner with the lava flash
+write32 $g_moku_test+76 2
+write32 $g_moku_test+72 5
+wait32 $g_moku_test+72 0 20
+frames 6
+write32 $g_moku_test+76 2
+write32 $g_moku_test+72 2
+wait32 $g_moku_test+72 0 30
+frames 6
+write32 $g_moku_test+72 12
+wait32 $g_moku_test+72 0 20
+frames 6
+frames 10
+# mission 2: reduce the marked stone to one breath
+write32 $g_moku_test+76 0x0302
+write32 $g_moku_test+72 16
+wait32 $g_moku_test+72 0 40
+frames 6
+frames 6
+write32 $g_moku_test+76 0x0304
+write32 $g_moku_test+72 16
+wait32 $g_moku_test+72 0 40
+frames 6
+frames 4
+screenshot tests/rom/out/15_dino_atari.png
+read8 $g_moku_test+31
+
+# effects off: nothing but the banner
+write32 $g_moku_test+76 0
+write32 $g_moku_test+72 7
+wait32 $g_moku_test+72 0 20
+frames 6
+write32 $g_moku_test+76 3
+write32 $g_moku_test+72 2
+wait32 $g_moku_test+72 0 30
+frames 6
+write32 $g_moku_test+72 12
+wait32 $g_moku_test+72 0 20
+frames 6
+write32 $g_moku_test+76 0x0403
+write32 $g_moku_test+72 16
+wait32 $g_moku_test+72 0 40
+frames 6
+frames 4
+screenshot tests/rom/out/15_effects_off.png
+read8 $g_moku_test+31
+
+write32 $g_moku_test+76 1
+write32 $g_moku_test+72 7
+wait32 $g_moku_test+72 0 20
+frames 6
+# The rule is about the human's turn: while the player is looking at the board, no frame
+# may be missed. Loading a scene, and the AI's own turn on a 19x19 board, are allowed to cost a
+# few - they are reported below, not asserted.
+wait8 $g_moku_test+30 0 900
+write32 $g_moku_test+72 9
+wait32 $g_moku_test+72 0 20
+frames 6
+frames 150
+assert16 $g_moku_test+38 0
+read32 $g_moku_test+84
+stats

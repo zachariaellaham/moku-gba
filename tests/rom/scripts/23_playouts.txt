@@ -1,0 +1,71 @@
+# Playouts per second, per board size, measured on the hardware.
+#
+# TCMD_BENCH_PLAYOUTS (21) runs `arg` complete playouts from the position on screen and answers
+# with playouts per second in cmd_result. It is the playout engine alone: the search never runs
+# them back to back like this, so this says how fast a playout is, not how many the tree gets.
+# The overlay on the board reports the other half.
+symbols build/moku.sym
+wait8 $g_moku_test+8 1 120
+frames 20
+write32 $g_moku_test+72 8
+wait32 $g_moku_test+72 0 20
+frames 6
+
+echo 7x7
+write32 $g_moku_test+76 0xF00010
+write32 $g_moku_test+72 3
+wait32 $g_moku_test+72 0 30
+frames 6
+write32 $g_moku_test+76 200
+write32 $g_moku_test+72 21
+wait32 $g_moku_test+72 0 900
+waitne32 $g_moku_test+80 0 5
+read32 $g_moku_test+80
+
+echo 9x9
+write32 $g_moku_test+76 0xF00011
+write32 $g_moku_test+72 3
+wait32 $g_moku_test+72 0 30
+frames 6
+write32 $g_moku_test+76 200
+write32 $g_moku_test+72 21
+wait32 $g_moku_test+72 0 1200
+waitne32 $g_moku_test+80 0 5
+read32 $g_moku_test+80
+
+echo 13x13
+write32 $g_moku_test+76 0xF00012
+write32 $g_moku_test+72 3
+wait32 $g_moku_test+72 0 30
+frames 6
+write32 $g_moku_test+76 100
+write32 $g_moku_test+72 21
+wait32 $g_moku_test+72 0 1500
+waitne32 $g_moku_test+80 0 5
+read32 $g_moku_test+80
+
+echo 19x19
+write32 $g_moku_test+76 0xF00013
+write32 $g_moku_test+72 3
+wait32 $g_moku_test+72 0 30
+frames 6
+write32 $g_moku_test+76 50
+write32 $g_moku_test+72 21
+wait32 $g_moku_test+72 0 2400
+waitne32 $g_moku_test+80 0 5
+read32 $g_moku_test+80
+
+echo and the search's own count, on the board the player sees
+write32 $g_moku_test+76 0xF00411
+write32 $g_moku_test+72 3
+wait32 $g_moku_test+72 0 30
+frames 6
+write32 $g_moku_test+76 0x0404
+write32 $g_moku_test+72 16
+wait32 $g_moku_test+72 0 20
+wait8 $g_moku_test+30 1 120
+wait8 $g_moku_test+30 0 900
+frames 4
+read32 $g_moku_test+32
+read32 $g_moku_test+128
+stats

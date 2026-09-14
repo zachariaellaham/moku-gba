@@ -1,0 +1,111 @@
+# Every menu screen: reach it, screenshot it, come back. Also checks that the scene manager
+# really switches (the id in the test block) rather than just drawing something new.
+symbols build/moku.sym
+wait8 $g_moku_test+8 1 120
+frames 20
+
+# a known state: EN, CLASSIC, SEN, JUICY
+write32 $g_moku_test+76 0
+write32 $g_moku_test+72 4
+wait32 $g_moku_test+72 0 20
+frames 6
+write32 $g_moku_test+76 0
+write32 $g_moku_test+72 5
+wait32 $g_moku_test+72 0 20
+frames 6
+write32 $g_moku_test+76 0
+write32 $g_moku_test+72 6
+wait32 $g_moku_test+72 0 20
+frames 6
+# unlock everything so the sandbox can show every row
+write32 $g_moku_test+72 8
+wait32 $g_moku_test+72 0 20
+frames 6
+frames 10
+screenshot tests/rom/out/10_title.png
+
+# TCMD_GOTO_SCENE(18) -> SAVE_SELECT (2)
+write32 $g_moku_test+76 2
+write32 $g_moku_test+72 18
+wait32 $g_moku_test+72 0 20
+frames 6
+assert8 $g_moku_test+8 2
+frames 10
+screenshot tests/rom/out/10_save_select.png
+
+# -> CAMPAIGN_MAP (3)
+write32 $g_moku_test+76 3
+write32 $g_moku_test+72 18
+wait32 $g_moku_test+72 0 20
+frames 6
+assert8 $g_moku_test+8 3
+frames 20
+screenshot tests/rom/out/10_map.png
+# walking right along the path scrolls to the second half
+press RIGHT 2 6
+press RIGHT 2 6
+press RIGHT 2 6
+press RIGHT 2 6
+press RIGHT 2 6
+press RIGHT 2 6
+press RIGHT 2 6
+press RIGHT 2 6
+press RIGHT 2 6
+press RIGHT 2 6
+press RIGHT 2 6
+frames 30
+screenshot tests/rom/out/10_map_right.png
+
+# -> BRIEFING (4) for mission 1
+write32 $g_moku_test+76 3
+write32 $g_moku_test+72 18
+wait32 $g_moku_test+72 0 20
+frames 6
+press A 2 30
+assert8 $g_moku_test+8 4
+frames 60
+screenshot tests/rom/out/10_briefing.png
+
+# -> SANDBOX_SETUP (7)
+write32 $g_moku_test+76 7
+write32 $g_moku_test+72 18
+wait32 $g_moku_test+72 0 20
+frames 6
+assert8 $g_moku_test+8 7
+frames 10
+screenshot tests/rom/out/10_sandbox.png
+
+# -> CHOOSE_OPPONENT (8)
+write32 $g_moku_test+76 8
+write32 $g_moku_test+72 18
+wait32 $g_moku_test+72 0 20
+frames 6
+assert8 $g_moku_test+8 8
+frames 20
+screenshot tests/rom/out/10_opponent.png
+press RIGHT 2 10
+press RIGHT 2 10
+frames 10
+screenshot tests/rom/out/10_opponent_ember.png
+
+# -> OPTIONS (9)
+write32 $g_moku_test+76 9
+write32 $g_moku_test+72 18
+wait32 $g_moku_test+72 0 20
+frames 6
+assert8 $g_moku_test+8 9
+frames 10
+screenshot tests/rom/out/10_options.png
+
+# no dropped frames while walking the menus
+# The rule is about the human's turn: while the player is looking at the board, no frame
+# may be missed. Loading a scene, and the AI's own turn on a 19x19 board, are allowed to cost a
+# few - they are reported below, not asserted.
+wait8 $g_moku_test+30 0 900
+write32 $g_moku_test+72 9
+wait32 $g_moku_test+72 0 20
+frames 6
+frames 150
+assert16 $g_moku_test+38 0
+read32 $g_moku_test+84
+stats

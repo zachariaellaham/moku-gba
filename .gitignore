@@ -1,0 +1,24 @@
+# Build output
+build/
+build-host/
+build-host*/
+*.elf
+*.map
+*.o
+*.d
+
+# The ROM is built at the repo root; the published copy lives in dist/
+*.gba
+!dist/moku.gba
+
+# Emulator and test output
+*.sav
+tests/rom/out/
+tests/rom/harness/mokurun
+
+# Trailer frames: 4 000 PNGs and a raw audio track, rebuilt by tools/make_trailer.sh
+tools/trailer/frames/
+
+# Python
+__pycache__/
+*.pyc

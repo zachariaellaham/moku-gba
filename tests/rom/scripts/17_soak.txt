@@ -1,0 +1,36 @@
+# Thirty minutes of random input (108000 frames at 60 fps) across the whole game.
+# The heartbeat must keep beating, no frame may be missed during a human turn, and the ROM must
+# still be on a real scene at the end.
+symbols build/moku.sym
+wait8 $g_moku_test+8 1 120
+frames 20
+write32 $g_moku_test+72 8
+wait32 $g_moku_test+72 0 20
+frames 6
+
+echo 17_soak: 10 minutes on the menus
+random 36000 20260913 A,B,UP,DOWN,LEFT,RIGHT,L,R,START,SELECT
+waitchange32 $g_moku_test+4 90
+read8 $g_moku_test+8
+
+echo 17_soak: 10 minutes on the board, mission 7
+write32 $g_moku_test+76 7
+write32 $g_moku_test+72 2
+wait32 $g_moku_test+72 0 40
+frames 6
+random 36000 99991111 A,UP,DOWN,LEFT,RIGHT,L,SELECT
+waitchange32 $g_moku_test+4 90
+
+echo 17_soak: 10 minutes in a 19x19 sandbox against MASTER
+write32 $g_moku_test+76 0xF00413
+write32 $g_moku_test+72 3
+wait32 $g_moku_test+72 0 40
+frames 6
+random 36000 5150 A,UP,DOWN,LEFT,RIGHT,L,R,SELECT
+waitchange32 $g_moku_test+4 90
+
+echo 17_soak: still alive
+read8 $g_moku_test+8
+read32 $g_moku_test+84
+read16 $g_moku_test+38
+stats

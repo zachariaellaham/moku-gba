@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics><meta name="design_doc_mode" content="canvas"><link href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&family=Pixelify+Sans:wght@400;600&display=swap" rel="stylesheet"><style>body{margin:0;background:#e9e4d8;font-family:system-ui,sans-serif}a{color:#1a1a1a}a:hover{color:#c23b2c}.dv-turn{padding:40px 44px 32px;border-bottom:1px solid rgba(0,0,0,.08);scroll-margin-top:16px}.dv-thd{display:flex;align-items:baseline;gap:10px;margin:0 0 20px}.dv-tid{font:600 10px ui-monospace,Menlo,monospace;padding:3px 7px;background:#1a1a1a;color:#fff;border-radius:4px;text-decoration:none}.dv-tname{font:600 13px/1.2 system-ui,sans-serif;color:#1a1a1a}.dv-opts{display:flex;flex-wrap:wrap;gap:28px;align-items:flex-start}.dv-opt{flex:none;display:flex;flex-direction:column;gap:9px;scroll-margin-top:16px}.dv-oid{font:600 10.5px ui-monospace,Menlo,monospace;padding:3px 7px;background:rgba(0,0,0,.08);color:#1a1a1a;border-radius:5px;text-decoration:none}.dv-olabel{display:flex;align-items:baseline;gap:8px;font:400 11px/1.3 system-ui,sans-serif;color:rgba(0,0,0,.55)}.dv-card{max-width:100%;background:#111;border:1px solid rgba(0,0,0,.08);border-radius:8px;box-shadow:0 1px 3px rgba(0,0,0,.06);overflow:hidden}.dv-opt:target .dv-oid{background:#2a78d6;color:#fff}.dv-next{margin:22px 0 0;font:12px/1.5 system-ui,sans-serif;color:rgba(0,0,0,.5)}.gba{width:720px;height:480px;overflow:hidden;background:#000;position:relative}.scr{width:240px;height:160px;transform:scale(3);transform-origin:0 0;position:relative;overflow:hidden;font-family:Silkscreen,monospace;font-size:8px;line-height:1;color:#efe6d2;image-rendering:pixelated}@keyframes blink{0%,49%{opacity:1}50%,100%{opacity:0}}@keyframes flash{0%,100%{box-shadow:0 0 0 1px #c23b2c}50%{box-shadow:0 0 0 2px #ff7a5a}}</style></helmet>
+
+<section class="dv-turn" id="t2">
+<div class="dv-thd"><a class="dv-tid" href="#t2">2</a><span class="dv-tname">Opponent select · helper characters (blue pup / dino) · juicy events in fun skins · EN/FR</span></div>
+<div style="max-width:760px;margin:0 0 24px;font:12px/1.55 system-ui,sans-serif;color:rgba(0,0,0,.65)">Helper is an <b>original</b> blue cartoon pup ("Indi") or a dino ("Rex") — chosen in Options, independent of the board skin. Classic skin stays sober (no event effects); PUP and DINO skins get screen shake, banners, particles and a helper pop-in on atari/capture. Opponents are characters, each hard-wired to an AI level. All copy has an EN and FR string table; <a class="dv-oid" href="#2d">2d</a> shows FR.</div>
+<div class="dv-opts">
+
+<div class="dv-opt" id="2a"><div class="dv-olabel"><a class="dv-oid" href="#2a">2a</a>Choose opponent — replaces the AI-level row in sandbox</div><div class="dv-card"><div class="gba"><div class="scr" style="background:#1b1f2a">
+<div style="position:absolute;left:0;top:0;width:240px;height:18px;background:#efe6d2;color:#1b1f2a;display:flex;align-items:center;padding:0 8px;box-sizing:border-box;justify-content:space-between"><span style="font-weight:700">CHOOSE OPPONENT</span><span style="color:#8a8070;font-size:6px">← → · A CONFIRM</span></div>
+<div style="position:absolute;left:8px;top:26px;width:224px;display:flex;justify-content:space-between">
+<sc-for list="{{ opps }}" as="o" hint-placeholder-count="5">
+<div style="width:40px;display:flex;flex-direction:column;gap:3px;align-items:center">
+<div style="width:40px;height:40px;background:{{ o.bg }};border:1px solid {{ o.bd }};box-sizing:border-box;display:flex;align-items:center;justify-content:center;font:4px ui-monospace,monospace;color:#1b1f2a;text-align:center;padding:2px">portrait {{ o.name }}</div>
+<div style="font-size:6px;color:{{ o.fg }}">{{ o.name }}</div>
+</div>
+</sc-for>
+</div>
+<div style="position:absolute;left:{{ oppCurX }}px;top:24px;width:44px;height:44px;border:1px solid #c23b2c;animation:blink 0.7s steps(1) infinite"></div>
+<div style="position:absolute;left:8px;top:86px;width:224px;height:66px;background:#efe6d2;color:#1b1f2a;padding:6px 8px;box-sizing:border-box;display:flex;gap:10px">
+<div style="display:flex;flex-direction:column;gap:5px;flex:1">
+<div style="display:flex;justify-content:space-between"><span style="font-weight:700;color:#c23b2c">{{ oppName }}</span><span style="color:#8a8070">{{ oppTitle }}</span></div>
+<div style="display:flex;gap:3px;align-items:center"><span style="color:#8a8070;width:34px">LEVEL</span><sc-for list="{{ aiPips }}" as="p" hint-placeholder-count="5"><div style="width:14px;height:5px;background:{{ p.bg }}"></div></sc-for></div>
+<div style="font-family:'Pixelify Sans',sans-serif;font-size:9px;line-height:1.3">{{ oppBlurb }}</div>
+<div style="display:flex;justify-content:space-between;color:#8a8070;font-size:6px"><span>YOUR RECORD 3W · 1L</span><span>BEST: WIN BY 12.5</span></div>
+</div></div>
+</div></div></div></div>
+
+<div class="dv-opt" id="2b"><div class="dv-olabel"><a class="dv-oid" href="#2b">2b</a>PUP skin — capture event: shake, confetti, banner, helper pop-in</div><div class="dv-card"><div class="gba"><div class="scr" style="background:#2b5aa6">
+<div style="position:absolute;left:2px;top:-1px;width:144px;height:160px;background:#8fd05e;background-image:repeating-linear-gradient(90deg,transparent 0 6px,rgba(40,110,30,.18) 6px 7px)"></div>
+<div style="position:absolute;left:10px;top:15px;width:128px;height:128px;background-image:linear-gradient(#f4f1e6 1px,transparent 1px),linear-gradient(90deg,#f4f1e6 1px,transparent 1px);background-size:16px 16px;border-right:1px solid #f4f1e6;border-bottom:1px solid #f4f1e6">
+<sc-for list="{{ stonesPup }}" as="s" hint-placeholder-count="6"><div style="position:absolute;left:{{ s.l }}px;top:{{ s.t }}px;width:14px;height:14px;border-radius:50%;background:{{ s.bg }};border:1px solid {{ s.bd }};box-sizing:border-box;box-shadow:1px 1px 0 rgba(0,0,0,.25)"></div></sc-for>
+<div style="position:absolute;left:57px;top:57px;width:14px;height:14px;border-radius:50%;border:2px dashed #f39a3e;box-sizing:border-box"></div><div style="position:absolute;left:73px;top:57px;width:14px;height:14px;border-radius:50%;border:2px dashed #f39a3e;box-sizing:border-box"></div>
+<div style="position:absolute;left:52px;top:50px;width:3px;height:3px;background:#f39a3e"></div><div style="position:absolute;left:92px;top:48px;width:3px;height:3px;background:#fff"></div><div style="position:absolute;left:96px;top:78px;width:3px;height:3px;background:#f39a3e"></div><div style="position:absolute;left:48px;top:80px;width:3px;height:3px;background:#3f6fc4"></div><div style="position:absolute;left:70px;top:42px;width:3px;height:3px;background:#fff"></div><div style="position:absolute;left:84px;top:86px;width:3px;height:3px;background:#3f6fc4"></div>
+</div>
+<div style="position:absolute;left:0;top:60px;width:240px;height:24px;background:#f39a3e;transform:rotate(-3deg);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:#fff;letter-spacing:2px;box-shadow:0 3px 0 #1b1f2a;text-shadow:1px 1px 0 #1b1f2a">CAPTURE! +2</div>
+<div style="position:absolute;left:152px;top:8px;width:80px;display:flex;flex-direction:column;gap:6px;color:#eaf4ff">
+<div style="display:flex;align-items:center;gap:5px"><div style="width:10px;height:10px;border-radius:50%;background:#3f6fc4;border:1px solid #eaf4ff;box-sizing:border-box"></div><div>TO PLAY</div></div>
+<div style="height:1px;background:#4f86d8"></div>
+<div style="display:flex;justify-content:space-between;color:#a9c6ee"><span>CAPT</span><span style="color:#f39a3e;font-weight:700">B 4 ▲ · O 0</span></div>
+<div style="display:flex;justify-content:space-between;color:#a9c6ee"><span>MOVE</span><span style="color:#eaf4ff">15</span></div>
+</div>
+<div style="position:absolute;left:176px;top:106px;width:56px;height:54px;background:repeating-linear-gradient(45deg,#3f6fc4 0 2px,#5b8de0 2px 4px);border:2px solid #fff;box-sizing:border-box;display:flex;align-items:center;justify-content:center;font:4px ui-monospace,monospace;color:#fff;text-align:center">helper INDI<br>blue pup, cheering<br>56×56 pop-in</div>
+<div style="position:absolute;left:150px;top:92px;background:#fff;color:#1b1f2a;padding:3px 4px;font-family:'Pixelify Sans',sans-serif;font-size:8px;border:1px solid #1b1f2a;white-space:nowrap">Good dog! Two down!</div>
+<div style="position:absolute;left:4px;top:150px;font:5px ui-monospace,monospace;color:#1b1f2a">screen shake 4f · confetti 30f · banner 45f · SFX bark</div>
+</div></div></div></div>
+
+<div class="dv-opt" id="2c"><div class="dv-olabel"><a class="dv-oid" href="#2c">2c</a>DINO skin (Jurassic) — atari event: roar banner, lava flash, cracks</div><div class="dv-card"><div class="gba"><div class="scr" style="background:#2a1a12">
+<div style="position:absolute;left:0;top:0;width:144px;height:160px;background:#8a7a5a;background-image:linear-gradient(rgba(60,40,20,.25),transparent 40%),repeating-linear-gradient(0deg,transparent 0 9px,rgba(50,35,20,.25) 9px 10px)"></div>
+<div style="position:absolute;left:2px;top:2px;width:140px;height:12px;background:repeating-linear-gradient(90deg,#4d6b2a 0 6px,#5f8034 6px 10px,transparent 10px 14px)"></div>
+<div style="position:absolute;left:2px;top:146px;width:140px;height:12px;background:repeating-linear-gradient(90deg,#4d6b2a 0 6px,#5f8034 6px 10px,transparent 10px 14px)"></div>
+<div style="position:absolute;left:8px;top:16px;width:128px;height:128px;background-image:linear-gradient(#3f3020 1px,transparent 1px),linear-gradient(90deg,#3f3020 1px,transparent 1px);background-size:16px 16px;border-right:1px solid #3f3020;border-bottom:1px solid #3f3020">
+<sc-for list="{{ stonesDino }}" as="s" hint-placeholder-count="6"><div style="position:absolute;left:{{ s.l }}px;top:{{ s.t }}px;width:14px;height:14px;border-radius:50% 50% 45% 45%;background:{{ s.bg }};border:1px solid {{ s.bd }};box-sizing:border-box;box-shadow:1px 1px 0 rgba(0,0,0,.4)"></div></sc-for>
+<div style="position:absolute;left:57px;top:57px;width:30px;height:14px;border-radius:7px;animation:flash 0.4s steps(1) infinite"></div>
+<svg style="position:absolute;left:0;top:0" width="128" height="128" viewBox="0 0 128 128"><polyline fill="none" stroke="#1a1008" stroke-width="1" points="0,20 18,34 30,30 44,50"></polyline><polyline fill="none" stroke="#1a1008" stroke-width="1" points="128,96 108,90 100,76 84,70"></polyline></svg>
+</div>
+<div style="position:absolute;left:0;top:0;width:144px;height:160px;background:rgba(255,106,26,.18)"></div>
+<div style="position:absolute;left:0;top:58px;width:240px;height:26px;background:#ff6a1a;clip-path:polygon(0 20%,4% 0,8% 20%,12% 0,16% 20%,20% 0,24% 20%,28% 0,32% 20%,36% 0,40% 20%,44% 0,48% 20%,52% 0,56% 20%,60% 0,64% 20%,68% 0,72% 20%,76% 0,80% 20%,84% 0,88% 20%,92% 0,96% 20%,100% 0,100% 100%,0 100%);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:#2a1a12;letter-spacing:3px;padding-top:4px;box-sizing:border-box">ROAR! ATARI</div>
+<div style="position:absolute;left:152px;top:8px;width:80px;display:flex;flex-direction:column;gap:6px;color:#f2dcb8">
+<div style="display:flex;align-items:center;gap:5px"><div style="width:10px;height:10px;border-radius:50%;background:#1a1410;border:1px solid #f2dcb8;box-sizing:border-box"></div><div>TO PLAY</div></div>
+<div style="height:1px;background:#5a3a22"></div>
+<div style="display:flex;justify-content:space-between;color:#b89a70"><span>CAPT</span><span style="color:#f2dcb8">B 2 · A 0</span></div>
+<div style="display:flex;justify-content:space-between;color:#b89a70"><span>MOVE</span><span style="color:#f2dcb8">14</span></div>
+</div>
+<div style="position:absolute;left:176px;top:100px;width:56px;height:56px;background:repeating-linear-gradient(45deg,#4d6b2a 0 2px,#6a8f3a 2px 4px);border:2px solid #ff6a1a;box-sizing:border-box;display:flex;align-items:center;justify-content:center;font:4px ui-monospace,monospace;color:#fff;text-align:center">helper REX<br>green T-rex, roaring<br>56×56 pop-in</div>
+<div style="position:absolute;left:150px;top:84px;background:#f2dcb8;color:#2a1a12;padding:3px 4px;font-family:'Pixelify Sans',sans-serif;font-size:8px;border:1px solid #2a1a12;white-space:nowrap">One breath. BITE!</div>
+<div style="position:absolute;left:4px;top:152px;width:136px;font:5px ui-monospace,monospace;color:#f2dcb8;white-space:nowrap">slab board · ferns · egg stones · lava flash 6f</div>
+</div></div></div></div>
+
+<div class="dv-opt" id="2d"><div class="dv-olabel"><a class="dv-oid" href="#2d">2d</a>Briefing in FR with the pup helper (same layout as <a class="dv-oid" href="#1c">1c</a>)</div><div class="dv-card"><div class="gba"><div class="scr" style="background:#1b1f2a">
+<div style="position:absolute;left:8px;top:8px;width:96px;height:96px;background:#d9a95a;border:1px solid #5a3a12;box-sizing:border-box"><div style="position:absolute;left:8px;top:8px;width:80px;height:80px;background-image:linear-gradient(#5a3a12 1px,transparent 1px),linear-gradient(90deg,#5a3a12 1px,transparent 1px);background-size:10px 10px;border-right:1px solid #5a3a12;border-bottom:1px solid #5a3a12"></div>
+<div style="position:absolute;left:44px;top:44px;width:8px;height:8px;border-radius:50%;background:#fff;border:1px solid #666;box-sizing:border-box;outline:1px solid #c23b2c;outline-offset:1px"></div>
+<div style="position:absolute;left:34px;top:44px;width:8px;height:8px;border-radius:50%;background:#1b1f2a"></div><div style="position:absolute;left:44px;top:34px;width:8px;height:8px;border-radius:50%;background:#1b1f2a"></div><div style="position:absolute;left:54px;top:44px;width:8px;height:8px;border-radius:50%;background:#1b1f2a"></div></div>
+<div style="position:absolute;left:112px;top:8px;width:120px;display:flex;flex-direction:column;gap:6px">
+<div style="color:#c23b2c">MISSION 07</div>
+<div style="font-size:9px;font-weight:700;white-space:nowrap">DERNIER SOUFFLE</div>
+<div style="height:1px;background:#3a4050"></div>
+<div style="color:#8a8070">OBJECTIF</div>
+<div style="font-family:'Pixelify Sans',sans-serif;font-size:9px;line-height:1.3">Capture la pierre blanche marquée.</div>
+<div style="color:#8a8070">RANG S</div>
+<div style="font-family:'Pixelify Sans',sans-serif;font-size:9px;line-height:1.3">En 1 coup, sans annuler.</div>
+</div>
+<div style="position:absolute;left:0;top:112px;width:240px;height:48px;background:#efe6d2;border-top:2px solid #3f6fc4;display:flex">
+<div style="width:48px;height:48px;background:repeating-linear-gradient(45deg,#3f6fc4 0 2px,#5b8de0 2px 4px);flex:none;display:flex;align-items:center;justify-content:center;font:4px ui-monospace,monospace;color:#fff;text-align:center">portrait<br>INDI (pup)<br>48×48</div>
+<div style="padding:5px 8px;color:#1b1f2a;display:flex;flex-direction:column;gap:4px;flex:1">
+<div style="color:#3f6fc4">INDI</div>
+<div style="font-family:'Pixelify Sans',sans-serif;font-size:9px;line-height:1.3">Une pierre respire par ses voisins vides. Celle-ci n'a plus qu'un souffle. Prends-le !</div>
+<div style="align-self:flex-end;color:#3f6fc4;animation:blink 0.8s steps(1) infinite">▼ A</div>
+</div></div>
+</div></div></div></div>
+
+<div class="dv-opt" id="2e"><div class="dv-olabel"><a class="dv-oid" href="#2e">2e</a>Options — language, helper, skin, effects, controls</div><div class="dv-card"><div class="gba"><div class="scr" style="background:#1b1f2a">
+<div style="position:absolute;left:0;top:0;width:240px;height:18px;background:#efe6d2;color:#1b1f2a;display:flex;align-items:center;padding:0 8px;box-sizing:border-box;justify-content:space-between"><span style="font-weight:700">OPTIONS</span><span style="color:#8a8070;font-size:6px">← → CHANGE · B BACK</span></div>
+<div style="position:absolute;left:8px;top:28px;width:140px;display:flex;flex-direction:column;gap:7px">
+<div style="display:flex;justify-content:space-between"><span style="color:#8a8070">LANGUAGE</span><span><span style="color:#c23b2c">EN</span> · FR</span></div>
+<div style="display:flex;justify-content:space-between"><span style="color:#8a8070">HELPER</span><span>SEN · <span style="color:#c23b2c">INDI</span> · REX</span></div>
+<div style="display:flex;justify-content:space-between"><span style="color:#8a8070">SKIN</span><span><span style="color:#c23b2c">CLASSIC</span>·PUP·DINO</span></div>
+<div style="display:flex;justify-content:space-between"><span style="color:#8a8070">EFFECTS</span><span>OFF · <span style="color:#c23b2c">JUICY</span></span></div>
+<div style="display:flex;justify-content:space-between"><span style="color:#8a8070">CONFIRM</span><span><span style="color:#c23b2c">2×A</span> · 1×A</span></div>
+<div style="display:flex;justify-content:space-between"><span style="color:#8a8070">MUSIC</span><span>▮▮▮▮▮▮▯▯</span></div>
+<div style="display:flex;justify-content:space-between"><span style="color:#8a8070">SFX</span><span>▮▮▮▮▮▮▮▮</span></div>
+</div>
+<div style="position:absolute;left:160px;top:28px;width:72px;height:72px;background:repeating-linear-gradient(45deg,#3f6fc4 0 2px,#5b8de0 2px 4px);border:1px solid #fff;box-sizing:border-box;display:flex;align-items:center;justify-content:center;font:4px ui-monospace,monospace;color:#fff;text-align:center">helper preview<br>INDI idle anim<br>72×72</div>
+<div style="position:absolute;left:160px;top:106px;width:72px;font-family:'Pixelify Sans',sans-serif;font-size:8px;line-height:1.3;color:#8a8070">Comments on missions and events.</div>
+</div></div></div></div>
+
+</div>
+<p class="dv-next">Try next: "draw idle/cheer/sad poses for Indi and Rex" · "opponent portraits as full characters" · "FR versions of every screen"</p>
+</section>
+<section class="dv-turn" id="t1">
+<div class="dv-thd"><a class="dv-tid" href="#t1">1</a><span class="dv-tname">MOKU — Go tactics for GBA · 8 screens at native 240×160, shown 3×</span></div>
+<div style="max-width:760px;margin:0 0 24px;font:12px/1.55 system-ui,sans-serif;color:rgba(0,0,0,.65);display:flex;flex-direction:column;gap:6px">
+<div><b>Assumptions:</b> working title <b>MOKU</b> (a "point" on the board). GBA native 240×160, 4bpp tiles, 8px pixel font (Silkscreen stands in for the bitmap font). Classic theme leads; two skins ("Backyard" pastel-blue/orange and "Dino" jungle/eggs) shown on the in-game HUD only — they swap board, stones and cursor, never layout. 20-mission campaign, each mission teaches one rule/tactic; boards 7→9→13→19. Tutor portraits are 48×48 placeholders.</div>
+<div><b>Design system:</b> paper <span style="color:#7a5a2a">#efe6d2</span> · ink <span style="color:#1b1f2a">#1b1f2a</span> · wood <span style="color:#b8842e">#d9a95a</span> · vermilion accent <span style="color:#c23b2c">#c23b2c</span>. HUD always on the right 88px; board fills the left 144px; dialogue always bottom 48px. A = place / confirm, B = cancel / undo, L/R = cycle info panels, START = pause, SELECT = hint.</div>
+</div>
+<div class="dv-opts">
+
+<div class="dv-opt" id="1a"><div class="dv-olabel"><a class="dv-oid" href="#1a">1a</a>Title screen</div><div class="dv-card"><div class="gba"><div class="scr" style="background:#efe6d2">
+<div style="position:absolute;left:0;top:70px;width:240px;height:90px;background:repeating-linear-gradient(135deg,#c9c0aa 0 3px,#d8cfba 3px 6px);border-top:1px solid #8a8070"></div>
+<div style="position:absolute;left:0;top:96px;width:240px;height:64px;background:linear-gradient(#1b1f2a,#2a3040)"></div>
+<div style="position:absolute;left:8px;top:74px;font:5px ui-monospace,monospace;color:#5a5040">ink-wash mountains · pixel art placeholder</div>
+<div style="position:absolute;left:24px;top:18px;width:14px;height:14px;border-radius:50%;background:#1b1f2a"></div>
+<div style="position:absolute;left:44px;top:18px;width:14px;height:14px;border-radius:50%;background:#fff;border:1px solid #8a8070;box-sizing:border-box"></div>
+<div style="position:absolute;left:66px;top:12px;font-size:24px;font-weight:700;color:#1b1f2a;letter-spacing:2px">MOKU</div>
+<div style="position:absolute;left:68px;top:40px;font-size:8px;color:#c23b2c">TACTICS OF GO</div>
+<div style="position:absolute;left:86px;top:106px;display:flex;flex-direction:column;gap:6px;font-size:8px;color:#efe6d2">
+<div style="display:flex;gap:6px;align-items:center"><span style="color:#c23b2c">▶</span>CAMPAIGN</div>
+<div style="display:flex;gap:6px;align-items:center"><span style="width:6px"></span>SANDBOX</div>
+<div style="display:flex;gap:6px;align-items:center"><span style="width:6px"></span>OPTIONS</div>
+</div>
+<div style="position:absolute;left:8px;top:150px;font-size:5px;color:#8a8070">©2026 · SAVE 1/3</div>
+</div></div></div></div>
+
+<div class="dv-opt" id="1b"><div class="dv-olabel"><a class="dv-oid" href="#1b">1b</a>Campaign map — 20 missions, scrolls horizontally</div><div class="dv-card"><div class="gba"><div class="scr" style="background:#efe6d2">
+<div style="position:absolute;left:0;top:0;width:240px;height:130px;background:repeating-linear-gradient(90deg,#e6dcc5 0 4px,#efe6d2 4px 8px)"></div>
+<div style="position:absolute;left:4px;top:4px;font:5px ui-monospace,monospace;color:#8a8070">scrolling ink landscape · placeholder</div>
+<svg style="position:absolute;left:0;top:0" width="240" height="130" viewBox="0 0 240 130"><polyline fill="none" stroke="#8a8070" stroke-width="1" stroke-dasharray="2 2" points="16,108 40,96 64,110 88,88 112,100 136,76 160,86 184,64 208,74 232,52"></polyline><polyline fill="none" stroke="#c9c0aa" stroke-width="1" stroke-dasharray="2 2" points="232,52 250,40"></polyline></svg>
+<div style="position:absolute;left:196px;top:38px;font-size:6px;color:#8a8070;white-space:nowrap">11-20 →</div>
+<sc-for list="{{ nodes }}" as="n" hint-placeholder-count="10">
+<div style="position:absolute;left:{{ n.x }}px;top:{{ n.y }}px;width:12px;height:12px;border-radius:50%;background:{{ n.bg }};border:1px solid #1b1f2a;box-sizing:border-box;display:flex;align-items:center;justify-content:center;font-size:5px;color:{{ n.fg }}">{{ n.i }}</div>
+</sc-for>
+<div style="position:absolute;left:{{ curX }}px;top:{{ curY }}px;width:16px;height:16px;border:1px solid #c23b2c;animation:blink 1s steps(1) infinite"></div>
+<div style="position:absolute;left:0;top:130px;width:240px;height:30px;background:#1b1f2a;padding:5px 8px;box-sizing:border-box;display:flex;justify-content:space-between">
+<div style="display:flex;flex-direction:column;gap:4px"><div style="color:#c23b2c">MISSION {{ curNum }}</div><div>{{ curName }}</div></div>
+<div style="display:flex;flex-direction:column;gap:4px;align-items:flex-end"><div style="color:#d9a95a">★★☆</div><div style="color:#8a8070">9×9 · CH.2 CAPTURE</div></div>
+</div>
+</div></div></div></div>
+
+<div class="dv-opt" id="1c"><div class="dv-olabel"><a class="dv-oid" href="#1c">1c</a>Mission briefing — tutor dialogue + objective card</div><div class="dv-card"><div class="gba"><div class="scr" style="background:#1b1f2a">
+<div style="position:absolute;left:8px;top:8px;width:96px;height:96px;background:#d9a95a;border:1px solid #5a3a12;box-sizing:border-box"><div style="position:absolute;left:8px;top:8px;width:80px;height:80px;background-image:linear-gradient(#5a3a12 1px,transparent 1px),linear-gradient(90deg,#5a3a12 1px,transparent 1px);background-size:10px 10px;border-right:1px solid #5a3a12;border-bottom:1px solid #5a3a12"></div>
+<div style="position:absolute;left:44px;top:44px;width:8px;height:8px;border-radius:50%;background:#fff;border:1px solid #666;box-sizing:border-box;outline:1px solid #c23b2c;outline-offset:1px"></div>
+<div style="position:absolute;left:34px;top:44px;width:8px;height:8px;border-radius:50%;background:#1b1f2a"></div>
+<div style="position:absolute;left:44px;top:34px;width:8px;height:8px;border-radius:50%;background:#1b1f2a"></div>
+<div style="position:absolute;left:54px;top:44px;width:8px;height:8px;border-radius:50%;background:#1b1f2a"></div>
+<div style="position:absolute;left:44px;top:54px;width:8px;height:8px;border:1px dashed #c23b2c;border-radius:50%;box-sizing:border-box"></div></div>
+<div style="position:absolute;left:112px;top:8px;width:120px;display:flex;flex-direction:column;gap:6px">
+<div style="color:#c23b2c">MISSION 07</div>
+<div style="font-size:11px;font-weight:700">LAST BREATH</div>
+<div style="height:1px;background:#3a4050"></div>
+<div style="color:#8a8070">OBJECTIVE</div>
+<div style="font-family:'Pixelify Sans',sans-serif;font-size:9px;line-height:1.3">Capture the marked white stone.</div>
+<div style="color:#8a8070">RANK S</div>
+<div style="font-family:'Pixelify Sans',sans-serif;font-size:9px;line-height:1.3">Do it in 1 move, no undo.</div>
+</div>
+<div style="position:absolute;left:0;top:112px;width:240px;height:48px;background:#efe6d2;border-top:2px solid #c23b2c;display:flex">
+<div style="width:48px;height:48px;background:repeating-linear-gradient(45deg,#c9c0aa 0 2px,#d8cfba 2px 4px);flex:none;display:flex;align-items:center;justify-content:center;font:4px ui-monospace,monospace;color:#5a5040;text-align:center">portrait<br>Master Sen<br>48×48</div>
+<div style="padding:5px 8px;color:#1b1f2a;display:flex;flex-direction:column;gap:4px;flex:1">
+<div style="color:#c23b2c">MASTER SEN</div>
+<div style="font-family:'Pixelify Sans',sans-serif;font-size:9px;line-height:1.3;color:#1b1f2a">A stone breathes through its empty neighbours. This one has a single breath left. Take it.</div>
+<div style="align-self:flex-end;color:#c23b2c;animation:blink 0.8s steps(1) infinite">▼ A</div>
+</div></div>
+</div></div></div></div>
+
+<div class="dv-opt" id="1d"><div class="dv-olabel"><a class="dv-oid" href="#1d">1d</a>In-game HUD · Classic theme</div><div class="dv-card"><div class="gba"><div class="scr" style="background:#1b1f2a">
+<div style="position:absolute;left:0;top:0;width:144px;height:160px;background:#d9a95a;background-image:repeating-linear-gradient(90deg,transparent 0 5px,rgba(90,58,18,.08) 5px 6px)"></div>
+<div style="position:absolute;left:8px;top:16px;width:128px;height:128px;background-image:linear-gradient(#5a3a12 1px,transparent 1px),linear-gradient(90deg,#5a3a12 1px,transparent 1px);background-size:16px 16px;border-right:1px solid #5a3a12;border-bottom:1px solid #5a3a12;box-sizing:content-box">
+<div style="position:absolute;left:31px;top:31px;width:3px;height:3px;background:#5a3a12"></div><div style="position:absolute;left:95px;top:31px;width:3px;height:3px;background:#5a3a12"></div><div style="position:absolute;left:63px;top:63px;width:3px;height:3px;background:#5a3a12"></div><div style="position:absolute;left:31px;top:95px;width:3px;height:3px;background:#5a3a12"></div><div style="position:absolute;left:95px;top:95px;width:3px;height:3px;background:#5a3a12"></div>
+<sc-for list="{{ stonesClassic }}" as="s" hint-placeholder-count="6"><div style="position:absolute;left:{{ s.l }}px;top:{{ s.t }}px;width:14px;height:14px;border-radius:50%;background:{{ s.bg }};border:1px solid {{ s.bd }};box-sizing:border-box;box-shadow:1px 1px 0 rgba(0,0,0,.35)"></div></sc-for>
+<div style="position:absolute;left:{{ cursorL }}px;top:{{ cursorT }}px;width:16px;height:16px;border:1px solid #c23b2c;box-sizing:border-box;animation:blink 0.6s steps(1) infinite"></div>
+<div style="position:absolute;left:{{ ghostL }}px;top:{{ ghostT }}px;width:14px;height:14px;border-radius:50%;background:rgba(27,31,42,.45)"></div>
+</div>
+<div style="position:absolute;left:8px;top:4px;font-size:6px;color:#5a3a12;display:flex;gap:11px"><span>A</span><span>B</span><span>C</span><span>D</span><span>E</span><span>F</span><span>G</span><span>H</span><span>J</span></div>
+<div style="position:absolute;left:152px;top:8px;width:80px;display:flex;flex-direction:column;gap:6px">
+<div style="display:flex;align-items:center;gap:5px"><div style="width:10px;height:10px;border-radius:50%;background:#1b1f2a;border:1px solid #efe6d2;box-sizing:border-box"></div><div>TO PLAY</div></div>
+<div style="height:1px;background:#3a4050"></div>
+<div style="display:flex;justify-content:space-between;color:#8a8070"><span>CAPT</span><span style="color:#efe6d2">B 2 · W 0</span></div>
+<div style="display:flex;justify-content:space-between;color:#8a8070"><span>MOVE</span><span style="color:#efe6d2">14</span></div>
+<div style="display:flex;justify-content:space-between;color:#8a8070"><span>KOMI</span><span style="color:#efe6d2">7.5</span></div>
+<div style="height:1px;background:#3a4050"></div>
+<div style="color:#c23b2c">OBJECTIVE</div>
+<div style="font-family:'Pixelify Sans',sans-serif;font-size:9px;line-height:1.3">Capture the marked stone.</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:3px 6px;font-size:6px;color:#8a8070"><div><span style="color:#efe6d2">A</span> PLACE</div><div><span style="color:#efe6d2">B</span> UNDO</div><div><span style="color:#efe6d2">SEL</span> HINT</div><div><span style="color:#efe6d2">R</span> PASS</div></div>
+</div>
+</div></div></div></div>
+
+<div class="dv-opt" id="1d2"><div class="dv-olabel"><a class="dv-oid" href="#1d2">1d′</a>Same HUD · PUP skin, early version (see <a class="dv-oid" href="#2b">2b</a>)</div><div class="dv-card"><div class="gba"><div class="scr" style="background:#23406e">
+<div style="position:absolute;left:0;top:0;width:144px;height:160px;background:#a8d8f0;background-image:radial-gradient(circle,rgba(255,255,255,.35) 1px,transparent 1.5px);background-size:12px 12px"></div>
+<div style="position:absolute;left:8px;top:16px;width:128px;height:128px;background-image:linear-gradient(#3b6ea8 1px,transparent 1px),linear-gradient(90deg,#3b6ea8 1px,transparent 1px);background-size:16px 16px;border-right:1px solid #3b6ea8;border-bottom:1px solid #3b6ea8">
+<div style="position:absolute;left:31px;top:31px;width:3px;height:3px;background:#3b6ea8"></div><div style="position:absolute;left:95px;top:31px;width:3px;height:3px;background:#3b6ea8"></div><div style="position:absolute;left:63px;top:63px;width:3px;height:3px;background:#3b6ea8"></div><div style="position:absolute;left:31px;top:95px;width:3px;height:3px;background:#3b6ea8"></div><div style="position:absolute;left:95px;top:95px;width:3px;height:3px;background:#3b6ea8"></div>
+<sc-for list="{{ stonesBackyard }}" as="s" hint-placeholder-count="6"><div style="position:absolute;left:{{ s.l }}px;top:{{ s.t }}px;width:14px;height:14px;border-radius:50%;background:{{ s.bg }};border:1px solid {{ s.bd }};box-sizing:border-box;box-shadow:1px 1px 0 rgba(0,0,0,.25)"></div></sc-for>
+<div style="position:absolute;left:{{ cursorL }}px;top:{{ cursorT }}px;width:16px;height:16px;border:1px solid #f5a25a;box-sizing:border-box;animation:blink 0.6s steps(1) infinite"></div>
+</div>
+<div style="position:absolute;left:152px;top:8px;width:80px;display:flex;flex-direction:column;gap:7px;color:#eaf4ff">
+<div style="display:flex;align-items:center;gap:5px"><div style="width:10px;height:10px;border-radius:50%;background:#2b4c8c;border:1px solid #eaf4ff;box-sizing:border-box"></div><div>TO PLAY</div></div>
+<div style="height:1px;background:#3b6ea8"></div>
+<div style="display:flex;justify-content:space-between;color:#9db8d8"><span>CAPT</span><span style="color:#eaf4ff">B 2 · O 0</span></div>
+<div style="display:flex;justify-content:space-between;color:#9db8d8"><span>MOVE</span><span style="color:#eaf4ff">14</span></div>
+<div style="height:1px;background:#3b6ea8"></div>
+<div style="color:#f5a25a">OBJECTIVE</div>
+<div style="font-family:'Pixelify Sans',sans-serif;font-size:9px;line-height:1.3">Capture the marked stone.</div>
+<div style="font:5px ui-monospace,monospace;color:#9db8d8;margin-top:6px">stones = blue &amp; orange pebbles; board = picnic-blanket blue; cursor = orange</div>
+</div>
+</div></div></div></div>
+
+<div class="dv-opt" id="1d3"><div class="dv-olabel"><a class="dv-oid" href="#1d3">1d″</a>Same HUD · DINO skin, early version (see <a class="dv-oid" href="#2c">2c</a>)</div><div class="dv-card"><div class="gba"><div class="scr" style="background:#1d2a14">
+<div style="position:absolute;left:0;top:0;width:144px;height:160px;background:#6f8f3a;background-image:repeating-linear-gradient(0deg,transparent 0 7px,rgba(30,50,20,.15) 7px 8px)"></div>
+<div style="position:absolute;left:8px;top:16px;width:128px;height:128px;background-image:linear-gradient(#2f4a1a 1px,transparent 1px),linear-gradient(90deg,#2f4a1a 1px,transparent 1px);background-size:16px 16px;border-right:1px solid #2f4a1a;border-bottom:1px solid #2f4a1a">
+<div style="position:absolute;left:31px;top:31px;width:3px;height:3px;background:#2f4a1a"></div><div style="position:absolute;left:95px;top:31px;width:3px;height:3px;background:#2f4a1a"></div><div style="position:absolute;left:63px;top:63px;width:3px;height:3px;background:#2f4a1a"></div><div style="position:absolute;left:31px;top:95px;width:3px;height:3px;background:#2f4a1a"></div><div style="position:absolute;left:95px;top:95px;width:3px;height:3px;background:#2f4a1a"></div>
+<sc-for list="{{ stonesDino }}" as="s" hint-placeholder-count="6"><div style="position:absolute;left:{{ s.l }}px;top:{{ s.t }}px;width:14px;height:14px;border-radius:50% 50% 45% 45%;background:{{ s.bg }};border:1px solid {{ s.bd }};box-sizing:border-box;box-shadow:1px 1px 0 rgba(0,0,0,.35)"></div></sc-for>
+<div style="position:absolute;left:{{ cursorL }}px;top:{{ cursorT }}px;width:16px;height:16px;border:1px solid #d84a2a;box-sizing:border-box;animation:blink 0.6s steps(1) infinite"></div>
+</div>
+<div style="position:absolute;left:152px;top:8px;width:80px;display:flex;flex-direction:column;gap:7px;color:#e8e0c0">
+<div style="display:flex;align-items:center;gap:5px"><div style="width:10px;height:10px;border-radius:50%;background:#4a3f35;border:1px solid #e8e0c0;box-sizing:border-box"></div><div>TO PLAY</div></div>
+<div style="height:1px;background:#3a5024"></div>
+<div style="display:flex;justify-content:space-between;color:#9aa878"><span>CAPT</span><span style="color:#e8e0c0">B 2 · W 0</span></div>
+<div style="display:flex;justify-content:space-between;color:#9aa878"><span>MOVE</span><span style="color:#e8e0c0">14</span></div>
+<div style="height:1px;background:#3a5024"></div>
+<div style="color:#d84a2a">OBJECTIVE</div>
+<div style="font-family:'Pixelify Sans',sans-serif;font-size:9px;line-height:1.3">Capture the marked stone.</div>
+<div style="font:5px ui-monospace,monospace;color:#9aa878;margin-top:6px">stones = speckled dark egg &amp; cream egg; board = jungle canopy; cursor = lava red; capture = egg cracks</div>
+</div>
+</div></div></div></div>
+
+<div class="dv-opt" id="1e"><div class="dv-olabel"><a class="dv-oid" href="#1e">1e</a>Atari feedback — group flashes, banner, one-line hint</div><div class="dv-card"><div class="gba"><div class="scr" style="background:#1b1f2a">
+<div style="position:absolute;left:0;top:0;width:144px;height:160px;background:#d9a95a;background-image:repeating-linear-gradient(90deg,transparent 0 5px,rgba(90,58,18,.08) 5px 6px)"></div>
+<div style="position:absolute;left:8px;top:16px;width:128px;height:128px;background-image:linear-gradient(#5a3a12 1px,transparent 1px),linear-gradient(90deg,#5a3a12 1px,transparent 1px);background-size:16px 16px;border-right:1px solid #5a3a12;border-bottom:1px solid #5a3a12">
+<sc-for list="{{ stonesClassic }}" as="s" hint-placeholder-count="6"><div style="position:absolute;left:{{ s.l }}px;top:{{ s.t }}px;width:14px;height:14px;border-radius:50%;background:{{ s.bg }};border:1px solid {{ s.bd }};box-sizing:border-box;box-shadow:1px 1px 0 rgba(0,0,0,.35)"></div></sc-for>
+<div style="position:absolute;left:57px;top:57px;width:30px;height:14px;border-radius:7px;animation:flash 0.5s steps(1) infinite"></div>
+<div style="position:absolute;left:{{ cursorL }}px;top:{{ cursorT }}px;width:16px;height:16px;border:1px solid #c23b2c;box-sizing:border-box"></div>
+<div style="position:absolute;left:{{ cursorL }}px;top:{{ cursorT }}px;width:16px;height:16px;display:flex;align-items:center;justify-content:center;font-size:8px;color:#c23b2c;font-weight:700">!</div>
+</div>
+<div style="position:absolute;left:0;top:64px;width:240px;height:22px;background:#c23b2c;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:#efe6d2;letter-spacing:2px;box-shadow:0 2px 0 #1b1f2a">ATARI!</div>
+<div style="position:absolute;left:152px;top:8px;width:80px;display:flex;flex-direction:column;gap:7px">
+<div style="display:flex;align-items:center;gap:5px"><div style="width:10px;height:10px;border-radius:50%;background:#1b1f2a;border:1px solid #efe6d2;box-sizing:border-box"></div><div>TO PLAY</div></div>
+<div style="height:1px;background:#3a4050"></div>
+<div style="display:flex;justify-content:space-between;color:#8a8070"><span>CAPT</span><span style="color:#efe6d2">B 2 · W 0</span></div>
+<div style="display:flex;justify-content:space-between;color:#8a8070"><span>MOVE</span><span style="color:#efe6d2">14</span></div>
+</div>
+<div style="position:absolute;left:152px;top:100px;width:80px;display:flex;flex-direction:column;gap:5px">
+<div style="color:#c23b2c">LIBERTIES: 1</div>
+<div style="font-family:'Pixelify Sans',sans-serif;font-size:9px;line-height:1.3">White has one breath left at E4.</div>
+</div>
+<div style="position:absolute;left:152px;top:148px;font-size:6px;color:#8a8070">SEL HINT · SHOWN 1/3</div>
+</div></div></div></div>
+
+<div class="dv-opt" id="1f"><div class="dv-olabel"><a class="dv-oid" href="#1f">1f</a>Mission clear — rank stamp + stats + unlock</div><div class="dv-card"><div class="gba"><div class="scr" style="background:#efe6d2">
+<div style="position:absolute;left:0;top:0;width:240px;height:28px;background:#1b1f2a;display:flex;align-items:center;padding:0 8px;box-sizing:border-box;justify-content:space-between"><span style="font-size:11px;font-weight:700">MISSION CLEAR</span><span style="color:#8a8070">07 · LAST BREATH</span></div>
+<div style="position:absolute;left:12px;top:40px;width:72px;height:72px;border:3px double #c23b2c;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:40px;font-weight:700;color:#c23b2c;transform:rotate(-8deg);box-sizing:border-box">S</div>
+<div style="position:absolute;left:100px;top:40px;width:132px;display:flex;flex-direction:column;gap:6px;color:#1b1f2a">
+<div style="display:flex;justify-content:space-between"><span style="color:#8a8070">MOVES</span><span>1 / 1</span></div>
+<div style="display:flex;justify-content:space-between"><span style="color:#8a8070">CAPTURES</span><span>1</span></div>
+<div style="display:flex;justify-content:space-between"><span style="color:#8a8070">UNDOS</span><span>0</span></div>
+<div style="display:flex;justify-content:space-between"><span style="color:#8a8070">HINTS</span><span>0</span></div>
+<div style="height:1px;background:#c9c0aa"></div>
+<div style="display:flex;justify-content:space-between"><span style="color:#8a8070">STARS</span><span style="color:#d9a95a">★★★</span></div>
+</div>
+<div style="position:absolute;left:12px;top:122px;width:216px;height:30px;background:#1b1f2a;padding:5px 8px;box-sizing:border-box;display:flex;flex-direction:column;gap:4px">
+<div style="color:#d9a95a">UNLOCKED</div>
+<div style="display:flex;justify-content:space-between"><span>Sandbox · 9×9 vs EASY AI</span><span style="color:#c23b2c;animation:blink 0.8s steps(1) infinite">A ▶</span></div>
+</div>
+</div></div></div></div>
+
+<div class="dv-opt" id="1g"><div class="dv-olabel"><a class="dv-oid" href="#1g">1g</a>Sandbox setup — ← → change value, A start</div><div class="dv-card"><div class="gba"><div class="scr" style="background:#1b1f2a">
+<div style="position:absolute;left:0;top:0;width:240px;height:20px;background:#efe6d2;color:#1b1f2a;display:flex;align-items:center;padding:0 8px;box-sizing:border-box;justify-content:space-between"><span style="font-weight:700">SANDBOX</span><span style="color:#8a8070;font-size:6px">← → CHANGE · A START · B BACK</span></div>
+<div style="position:absolute;left:8px;top:26px;width:140px;display:flex;flex-direction:column;gap:5px">
+<div style="display:flex;justify-content:space-between"><span style="color:#8a8070">BOARD</span><span>7 · 9 · <span style="color:#c23b2c">13</span> · 19</span></div>
+<div style="display:flex;justify-content:space-between"><span style="color:#8a8070">YOU PLAY</span><span><span style="color:#c23b2c">BLACK</span> · WHITE</span></div>
+<div style="display:flex;justify-content:space-between"><span style="color:#8a8070">AI</span><span style="color:#c23b2c">{{ aiLabel }}</span></div>
+<div style="display:flex;gap:3px;padding-left:40px"><sc-for list="{{ aiPips }}" as="p" hint-placeholder-count="5"><div style="width:16px;height:5px;background:{{ p.bg }}"></div></sc-for></div>
+<div style="display:flex;justify-content:space-between"><span style="color:#8a8070">HANDICAP</span><span>0 · <span style="color:#c23b2c">2</span> · 3 · 4 · 5</span></div>
+<div style="display:flex;justify-content:space-between"><span style="color:#8a8070">SCORING</span><span><span style="color:#c23b2c">AREA</span> · TERRITORY</span></div>
+<div style="display:flex;justify-content:space-between"><span style="color:#8a8070">KOMI</span><span>{{ komi }}</span></div>
+<div style="display:flex;justify-content:space-between"><span style="color:#8a8070">SKIN</span><span><span style="color:#c23b2c">CLASSIC</span>·BACKYD·DINO</span></div>
+</div>
+<div style="position:absolute;left:160px;top:28px;width:72px;height:72px;background:#d9a95a;border:1px solid #5a3a12;box-sizing:border-box"><div style="position:absolute;left:5px;top:5px;width:60px;height:60px;background-image:linear-gradient(#5a3a12 1px,transparent 1px),linear-gradient(90deg,#5a3a12 1px,transparent 1px);background-size:5px 5px;border-right:1px solid #5a3a12;border-bottom:1px solid #5a3a12"></div><div style="position:absolute;left:18px;top:18px;width:5px;height:5px;border-radius:50%;background:#1b1f2a"></div><div style="position:absolute;left:48px;top:48px;width:5px;height:5px;border-radius:50%;background:#1b1f2a"></div></div>
+<div style="position:absolute;left:160px;top:106px;width:72px;font-family:'Pixelify Sans',sans-serif;font-size:8px;line-height:1.3;color:#8a8070">{{ aiBlurb }}</div>
+<div style="position:absolute;left:8px;top:140px;width:224px;height:14px;background:#c23b2c;display:flex;align-items:center;justify-content:center;font-weight:700">START GAME</div>
+</div></div></div></div>
+
+<div class="dv-opt" id="1h"><div class="dv-olabel"><a class="dv-oid" href="#1h">1h</a>Pause menu — overlay on the dimmed board</div><div class="dv-card"><div class="gba"><div class="scr" style="background:#1b1f2a">
+<div style="position:absolute;left:0;top:0;width:144px;height:160px;background:#d9a95a"></div>
+<div style="position:absolute;left:8px;top:16px;width:128px;height:128px;background-image:linear-gradient(#5a3a12 1px,transparent 1px),linear-gradient(90deg,#5a3a12 1px,transparent 1px);background-size:16px 16px;border-right:1px solid #5a3a12;border-bottom:1px solid #5a3a12">
+<sc-for list="{{ stonesClassic }}" as="s" hint-placeholder-count="6"><div style="position:absolute;left:{{ s.l }}px;top:{{ s.t }}px;width:14px;height:14px;border-radius:50%;background:{{ s.bg }};border:1px solid {{ s.bd }};box-sizing:border-box"></div></sc-for>
+</div>
+<div style="position:absolute;left:0;top:0;width:240px;height:160px;background:repeating-linear-gradient(0deg,rgba(27,31,42,.75) 0 1px,rgba(27,31,42,.55) 1px 2px)"></div>
+<div style="position:absolute;left:64px;top:10px;width:112px;background:#efe6d2;border:2px solid #1b1f2a;box-shadow:3px 3px 0 #c23b2c;color:#1b1f2a;padding:7px 10px;box-sizing:border-box;display:flex;flex-direction:column;gap:5px">
+<div style="font-weight:700;color:#c23b2c">PAUSED</div>
+<div style="height:1px;background:#c9c0aa"></div>
+<div style="display:flex;gap:6px"><span style="color:#c23b2c">▶</span>RESUME</div>
+<div style="display:flex;gap:6px"><span style="width:6px"></span>UNDO</div>
+<div style="display:flex;gap:6px"><span style="width:6px"></span>HINT</div>
+<div style="display:flex;gap:6px"><span style="width:6px"></span>PASS</div>
+<div style="display:flex;gap:6px"><span style="width:6px"></span>ESTIMATE SCORE</div>
+<div style="display:flex;gap:6px;color:#8a8070"><span style="width:6px"></span>RESIGN</div>
+<div style="display:flex;gap:6px"><span style="width:6px"></span>OPTIONS</div>
+</div>
+<div style="position:absolute;left:64px;top:148px;width:112px;font-size:6px;color:#8a8070;text-align:center">START RESUME · B BACK</div>
+</div></div></div></div>
+
+</div>
+<p class="dv-next">Try next: "make <a class="dv-oid" href="#1b">1b</a> a vertical mountain-climb map" · "add a score-estimate overlay to <a class="dv-oid" href="#1d">1d</a>" · "portraits + names for 4 tutors"</p>
+</section>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;clearedMissions&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:6,&quot;min&quot;:0,&quot;max&quot;:19,&quot;step&quot;:1,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Campaign map&quot;},&quot;aiLevel&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;HARD&quot;,&quot;options&quot;:[&quot;VERY EASY&quot;,&quot;EASY&quot;,&quot;NORMAL&quot;,&quot;HARD&quot;,&quot;MASTER&quot;],&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Sandbox&quot;},&quot;komi&quot;:{&quot;editor&quot;:&quot;float&quot;,&quot;default&quot;:7.5,&quot;min&quot;:0,&quot;max&quot;:9,&quot;step&quot;:0.5,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Sandbox&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    const cleared = Math.max(0, Math.min(20, this.props.clearedMissions ?? 6));
+    const names = ['First Stone','Breath','Take It','Run!','Connect','Ladder','Last Breath','Net','Ko','One Eye','Two Eyes','False Eye','Snapback','Seki','Count','Cut','Invade 3-3','Life & Death','Whole Board','Tengen'];
+    const pts = [[16,108],[40,96],[64,110],[88,88],[112,100],[136,76],[160,86],[184,64],[208,74],[232,52]];
+    // first screen of the scrolling map shows missions 1-10; 11-20 continue off-screen right
+    const all = names.map((n, i) => {
+      const p = pts[i % 10];
+      const x = p[0] - 6 + (i >= 10 ? 240 : 0), y = p[1] - 6;
+      const done = i < cleared, cur = i === cleared;
+      return { i: i + 1, x, y, bg: done ? '#1b1f2a' : cur ? '#c23b2c' : '#efe6d2', fg: done || cur ? '#efe6d2' : '#1b1f2a', name: n };
+    });
+    const nodes = all.slice(0, 10);
+    const c = all[Math.min(cleared, 19)];
+    const stones = [[4,4,'w'],[5,4,'w'],[3,4,'b'],[4,3,'b'],[5,3,'b'],[6,4,'b'],[5,5,'b'],[2,6,'b'],[6,6,'w'],[7,3,'w'],[1,2,'b'],[2,2,'w'],[7,7,'b'],[1,7,'w']];
+    const mk = (col) => stones.map(([x, y, k]) => ({ l: x * 16 - 7, t: y * 16 - 7, bg: col[k][0], bd: col[k][1] }));
+    const levels = ['VERY EASY','EASY','NORMAL','HARD','MASTER'];
+    const blurbs = ['Random legal moves, avoids self-atari.','Greedy: captures and saves stones.','1-ply heuristic: territory, liberties, patterns.','Monte-Carlo tree search, ~2s think.','Full MCTS + ladder reader, 5s think.'];
+    const opps = [
+      ['PEBBLE', 'THE SLEEPY TURTLE', '#9ac48a', 'Plays almost at random. Never fills its own eyes, though.'],
+      ['SPROUT', 'THE EAGER SEEDLING', '#c9d88a', 'Grabs every capture it sees and saves its stones in atari.'],
+      ['KOAN', 'THE WANDERING MONK', '#d8c8a8', 'Reads shapes and territory one move ahead. Solid and patient.'],
+      ['EMBER', 'THE FOX GENERAL', '#e0a070', 'Searches thousands of futures. Thinks for two seconds.'],
+      ['TENGEN', 'THE OLD MASTER', '#b0b8c8', 'Full-strength search with ladder reading. Five seconds of thought.'],
+    ];
+    const ai = Math.max(0, Math.min(4, levels.indexOf(this.props.aiLevel ?? 'HARD')));
+    return {
+      nodes, curX: c.x - 2, curY: c.y - 2, curNum: String(c.i).padStart(2, '0'), curName: c.name.toUpperCase(),
+      stonesClassic: mk({ b: ['#1d1d22', '#000'], w: ['#f2efe6', '#a09880'] }),
+      stonesBackyard: mk({ b: ['#2b4c8c', '#17305e'], w: ['#f28c3a', '#b85a18'] }),
+      stonesDino: mk({ b: ['#1a1410', '#000'], w: ['#e0a030', '#8a5a10'] }),
+      stonesPup: mk({ b: ['#3f6fc4', '#20407a'], w: ['#f39a3e', '#b05a10'] }),
+      opps: opps.map((o, i) => ({ name: o[0], bg: o[2], bd: i === ai ? '#c23b2c' : '#3a4050', fg: i === ai ? '#c23b2c' : '#8a8070' })),
+      oppCurX: 6 + ai * 46, oppName: opps[ai][0], oppTitle: opps[ai][1], oppBlurb: opps[ai][3],
+      cursorL: 4 * 16 - 8, cursorT: 5 * 16 - 8, ghostL: 4 * 16 - 7, ghostT: 5 * 16 - 7,
+      aiLabel: levels[ai], aiBlurb: blurbs[ai], aiPips: levels.map((_, i) => ({ bg: i <= ai ? '#c23b2c' : '#3a4050' })),
+      komi: (this.props.komi ?? 7.5).toFixed(1),
+    };
+  }
+}
+</script>
+</body>
+</html>

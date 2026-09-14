@@ -1,0 +1,75 @@
+# "Hints after 2 failures". SELECT always gives a hint - the HUD says so on every
+# mission - so the rule is met by the helper offering one, unprompted, from the third attempt.
+# hint_offered (offset 70) is 1 while that offer is queued.
+symbols build/moku.sym
+wait8 $g_moku_test+8 1 120
+frames 20
+write32 $g_moku_test+72 8
+wait32 $g_moku_test+72 0 20
+frames 6
+
+echo mission 8, the net: the ladder atari at (5,3) is the trap
+write32 $g_moku_test+76 8
+write32 $g_moku_test+72 2
+wait32 $g_moku_test+72 0 40
+frames 6
+assert8 $g_moku_test+26 8
+assert8 $g_moku_test+70 0
+write32 $g_moku_test+72 12
+wait32 $g_moku_test+72 0 20
+frames 6
+write32 $g_moku_test+76 0x0305
+write32 $g_moku_test+72 16
+wait32 $g_moku_test+72 0 60
+frames 90
+assert8 $g_moku_test+27 2
+
+echo a second failure, and the helper starts offering
+write32 $g_moku_test+76 8
+write32 $g_moku_test+72 2
+wait32 $g_moku_test+72 0 40
+frames 6
+assert8 $g_moku_test+70 0
+write32 $g_moku_test+72 12
+wait32 $g_moku_test+72 0 20
+frames 6
+write32 $g_moku_test+76 0x0305
+write32 $g_moku_test+72 16
+wait32 $g_moku_test+72 0 60
+frames 90
+assert8 $g_moku_test+27 2
+
+echo the third attempt opens with the offer
+write32 $g_moku_test+76 8
+write32 $g_moku_test+72 2
+wait32 $g_moku_test+72 0 40
+frames 10
+assert8 $g_moku_test+70 1
+assert8 $g_moku_test+124 1
+screenshot tests/rom/out/25_tutor_line.png
+# the first A finishes the typewriter, the second advances to the offer
+press A 2 20
+press A 2 40
+frames 30
+assert8 $g_moku_test+124 1
+assert8 $g_moku_test+70 1
+screenshot tests/rom/out/25_hint_offer.png
+
+echo and the hint it offers is the move that works
+press A 2 20
+press A 2 20
+press SELECT 2 30
+frames 20
+write32 $g_moku_test+76 0x0404
+write32 $g_moku_test+72 16
+wait32 $g_moku_test+72 0 60
+frames 90
+assert8 $g_moku_test+27 1
+
+echo clearing it puts the mission back to a clean slate
+write32 $g_moku_test+76 8
+write32 $g_moku_test+72 2
+wait32 $g_moku_test+72 0 40
+frames 10
+assert8 $g_moku_test+70 0
+stats

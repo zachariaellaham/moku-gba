@@ -1,0 +1,123 @@
+# Three skins and two languages, on the busiest screen in the game.
+symbols build/moku.sym
+wait8 $g_moku_test+8 1 120
+frames 20
+write32 $g_moku_test+72 8
+wait32 $g_moku_test+72 0 20
+frames 6
+
+# mission 7 on the board, tutor line skipped
+write32 $g_moku_test+76 7
+write32 $g_moku_test+72 2
+wait32 $g_moku_test+72 0 30
+frames 6
+write32 $g_moku_test+72 12
+wait32 $g_moku_test+72 0 20
+frames 6
+frames 10
+
+# EN + CLASSIC / PUP / DINO
+write32 $g_moku_test+76 0
+write32 $g_moku_test+72 5
+wait32 $g_moku_test+72 0 20
+frames 6
+frames 10
+screenshot tests/rom/out/14_en_classic.png
+write32 $g_moku_test+76 1
+write32 $g_moku_test+72 5
+wait32 $g_moku_test+72 0 20
+frames 6
+frames 10
+screenshot tests/rom/out/14_en_pup.png
+write32 $g_moku_test+76 2
+write32 $g_moku_test+72 5
+wait32 $g_moku_test+72 0 20
+frames 6
+frames 10
+screenshot tests/rom/out/14_en_dino.png
+
+# FR, same three
+write32 $g_moku_test+76 1
+write32 $g_moku_test+72 4
+wait32 $g_moku_test+72 0 20
+frames 6
+assert8 $g_moku_test+10 1
+write32 $g_moku_test+76 0
+write32 $g_moku_test+72 5
+wait32 $g_moku_test+72 0 20
+frames 6
+frames 10
+screenshot tests/rom/out/14_fr_classic.png
+write32 $g_moku_test+76 1
+write32 $g_moku_test+72 5
+wait32 $g_moku_test+72 0 20
+frames 6
+frames 10
+screenshot tests/rom/out/14_fr_pup.png
+write32 $g_moku_test+76 2
+write32 $g_moku_test+72 5
+wait32 $g_moku_test+72 0 20
+frames 6
+frames 10
+screenshot tests/rom/out/14_fr_dino.png
+
+# the briefing is the text-heaviest screen: check it in French with each helper
+write32 $g_moku_test+76 0
+write32 $g_moku_test+72 5
+wait32 $g_moku_test+72 0 20
+frames 6
+write32 $g_moku_test+76 4
+write32 $g_moku_test+72 18
+wait32 $g_moku_test+72 0 20
+frames 6
+frames 90
+screenshot tests/rom/out/14_fr_briefing_sen.png
+write32 $g_moku_test+76 1
+write32 $g_moku_test+72 6
+wait32 $g_moku_test+72 0 20
+frames 6
+write32 $g_moku_test+76 4
+write32 $g_moku_test+72 18
+wait32 $g_moku_test+72 0 20
+frames 6
+frames 90
+screenshot tests/rom/out/14_fr_briefing_indi.png
+write32 $g_moku_test+76 2
+write32 $g_moku_test+72 6
+wait32 $g_moku_test+72 0 20
+frames 6
+write32 $g_moku_test+76 4
+write32 $g_moku_test+72 18
+wait32 $g_moku_test+72 0 20
+frames 6
+frames 90
+screenshot tests/rom/out/14_fr_briefing_rex.png
+
+# options in French
+write32 $g_moku_test+76 9
+write32 $g_moku_test+72 18
+wait32 $g_moku_test+72 0 20
+frames 6
+frames 10
+screenshot tests/rom/out/14_fr_options.png
+
+# back to English so the next test starts clean
+write32 $g_moku_test+76 0
+write32 $g_moku_test+72 4
+wait32 $g_moku_test+72 0 20
+frames 6
+write32 $g_moku_test+76 0
+write32 $g_moku_test+72 6
+wait32 $g_moku_test+72 0 20
+frames 6
+# The rule is about the human's turn: while the player is looking at the board, no frame
+# may be missed. Loading a scene, and the AI's own turn on a 19x19 board, are allowed to cost a
+# few - they are reported below, not asserted.
+wait8 $g_moku_test+30 0 900
+write32 $g_moku_test+72 9
+wait32 $g_moku_test+72 0 20
+frames 6
+frames 150
+assert16 $g_moku_test+38 0
+read32 $g_moku_test+84
+stats

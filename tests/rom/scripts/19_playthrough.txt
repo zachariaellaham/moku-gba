@@ -1,0 +1,74 @@
+# A player's path, with nothing but the buttons: title -> campaign -> file -> map -> briefing ->
+# mission 1 -> clear -> next mission. No debug commands at all.
+symbols build/moku.sym
+wait8 $g_moku_test+8 1 120
+frames 30
+
+echo A on CAMPAIGN opens the file screen
+press A 2 30
+assert8 $g_moku_test+8 2
+screenshot tests/rom/out/19_save_select.png
+
+echo A on FILE 1 opens the map
+press A 2 30
+assert8 $g_moku_test+8 3
+screenshot tests/rom/out/19_map.png
+
+echo A on the first node opens the briefing
+press A 2 30
+assert8 $g_moku_test+8 4
+
+echo A reads the line out, A again starts the mission
+press A 2 30
+press A 2 30
+wait8 $g_moku_test+8 5 300
+assert8 $g_moku_test+26 1
+screenshot tests/rom/out/19_mission1.png
+
+echo the tutor speaks on the board too; A gets past it
+press A 2 20
+press A 2 20
+frames 20
+screenshot tests/rom/out/19_mission1_ready.png
+
+echo the cursor starts on the first marked point, so A A places a stone there
+assert8 $g_moku_test+18 2
+assert8 $g_moku_test+19 1
+press A 2 8
+press A 2 20
+assert16 $g_moku_test+20 2
+
+echo walk to the second mark and place, then the third
+press RIGHT 2 6
+press DOWN 2 6
+press DOWN 2 6
+press A 2 8
+press A 2 20
+press RIGHT 2 6
+press DOWN 2 6
+press DOWN 2 6
+press A 2 8
+press A 2 20
+frames 60
+screenshot tests/rom/out/19_mission1_done.png
+assert8 $g_moku_test+27 1
+
+echo the win line, then the clear screen, then the next mission
+press A 2 40
+wait8 $g_moku_test+8 6 240
+frames 40
+screenshot tests/rom/out/19_clear.png
+assert8 $g_moku_test+48 1
+assert8 $g_moku_test+49 4
+press A 2 40
+assert8 $g_moku_test+8 4
+screenshot tests/rom/out/19_next_briefing.png
+assert8 $g_moku_test+26 2
+
+echo B goes back to the map, where mission 1 is now cleared and 2 is the next one
+press B 2 40
+assert8 $g_moku_test+8 3
+assert8 $g_moku_test+48 1
+frames 20
+screenshot tests/rom/out/19_map_cleared.png
+stats

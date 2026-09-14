@@ -1,0 +1,87 @@
+# Music and sound effects, proved from the hardware rather than from the game's intentions.
+#
+# music_id  (offset 136) is the track the game asked for.
+# reserved[11] (offset 155) is 1 while maxmod is really mixing a module.
+# reserved[14..15] (offset 158) is that module's sequence position: if it keeps moving, the music
+#                  is genuinely playing and not merely requested.
+# last_sfx (offset 138) is the last effect fired.
+symbols build/moku.sym
+wait8 $g_moku_test+8 1 120
+frames 30
+
+echo the title theme is playing, and its position advances
+assert16 $g_moku_test+136 1
+assert8 $g_moku_test+155 1
+waitchange16 $g_moku_test+158 1200
+
+echo menu sounds fire
+press DOWN 2 8
+assert16 $g_moku_test+138 4
+press A 2 20
+assert16 $g_moku_test+138 5
+
+echo the map has its own theme
+write32 $g_moku_test+72 8
+wait32 $g_moku_test+72 0 20
+frames 6
+write32 $g_moku_test+76 3
+write32 $g_moku_test+72 18
+wait32 $g_moku_test+72 0 20
+frames 20
+assert8 $g_moku_test+8 3
+assert16 $g_moku_test+136 2
+assert8 $g_moku_test+155 1
+waitchange16 $g_moku_test+158 1200
+
+echo the board theme, and the stone sound when we play
+# hot seat: nobody starts thinking straight after the stone, so the stone is the last sound heard
+write32 $g_moku_test+76 0x10000011
+write32 $g_moku_test+72 3
+wait32 $g_moku_test+72 0 30
+frames 20
+assert16 $g_moku_test+136 3
+assert8 $g_moku_test+155 1
+waitchange16 $g_moku_test+158 1200
+write32 $g_moku_test+76 0x0404
+write32 $g_moku_test+72 16
+wait32 $g_moku_test+72 0 20
+frames 6
+assert16 $g_moku_test+138 1
+
+echo the DINO skin plays its own board theme
+write32 $g_moku_test+76 2
+write32 $g_moku_test+72 5
+wait32 $g_moku_test+72 0 20
+frames 6
+write32 $g_moku_test+76 0xF00111
+write32 $g_moku_test+72 3
+wait32 $g_moku_test+72 0 30
+frames 20
+assert8 $g_moku_test+155 1
+waitchange16 $g_moku_test+158 1200
+write32 $g_moku_test+76 0
+write32 $g_moku_test+72 5
+wait32 $g_moku_test+72 0 20
+frames 6
+
+echo music volume 0 stops the hardware, sfx volume 0 silences effects
+write32 $g_moku_test+76 0x0800
+write32 $g_moku_test+72 19
+wait32 $g_moku_test+72 0 20
+frames 10
+write32 $g_moku_test+72 1
+wait32 $g_moku_test+72 0 20
+frames 30
+assert8 $g_moku_test+155 0
+
+echo and turning it back up starts it again
+write32 $g_moku_test+76 0x0808
+write32 $g_moku_test+72 19
+wait32 $g_moku_test+72 0 20
+frames 10
+write32 $g_moku_test+72 1
+wait32 $g_moku_test+72 0 20
+frames 30
+assert8 $g_moku_test+155 1
+waitchange16 $g_moku_test+158 1200
+stats

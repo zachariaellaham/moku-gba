@@ -1,0 +1,53 @@
+# SRAM: settings survive a reboot, and wiping SRAM brings the defaults back.
+symbols build/moku.sym
+wait8 $g_moku_test+8 1 120
+frames 20
+
+# TCMD_WIPE_SRAM (14)
+write32 $g_moku_test+76 0
+write32 $g_moku_test+72 14
+wait32 $g_moku_test+72 0 20
+frames 6
+assert32 $g_moku_test+80 1
+assert8 $g_moku_test+10 0
+
+# TCMD_SET_LANGUAGE (4) = FR
+write32 $g_moku_test+76 1
+write32 $g_moku_test+72 4
+wait32 $g_moku_test+72 0 20
+frames 6
+assert32 $g_moku_test+80 1
+assert8 $g_moku_test+10 1
+frames 5
+screenshot tests/rom/out/title_fr.png
+
+# TCMD_SAVE_NOW (20)
+write32 $g_moku_test+76 0
+write32 $g_moku_test+72 20
+wait32 $g_moku_test+72 0 20
+frames 6
+assert32 $g_moku_test+80 1
+sram_save tests/rom/out/save_fr.sav
+
+reset
+frames 60
+echo 01_save_roundtrip: language after reboot must be FR
+assert8 $g_moku_test+10 1
+assert8 $g_moku_test+8 1
+
+# wiping SRAM and rebooting must give English back
+write32 $g_moku_test+76 0
+write32 $g_moku_test+72 14
+wait32 $g_moku_test+72 0 20
+frames 6
+reset
+frames 60
+echo 01_save_roundtrip: language after a wipe must be EN
+assert8 $g_moku_test+10 0
+
+# a save written before the wipe can be restored from outside
+sram_load tests/rom/out/save_fr.sav
+reset
+frames 60
+assert8 $g_moku_test+10 1
+stats

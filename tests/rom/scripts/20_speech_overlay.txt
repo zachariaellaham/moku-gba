@@ -1,0 +1,147 @@
+# The opponent's speech bubbles (mockup 2b) and the debug overlay.
+#
+# reserved[8]  (offset 152) latches every line said this game: bit0 intro, bit1 it captured,
+#              bit2 we captured, bit3 win, bit4 lose, bit5 atari.
+# reserved[10] (offset 154) is the most recent line + 1.
+# reserved[9]  (offset 153) is 1 while the debug overlay is on.
+#
+# The board is 19x19 against TENGEN so every AI turn lasts about five seconds: that leaves a wide
+# window to force the opponent's stones onto the points this test needs, instead of racing it.
+symbols build/moku.sym
+wait8 $g_moku_test+8 1 120
+frames 20
+write32 $g_moku_test+72 8
+wait32 $g_moku_test+72 0 20
+frames 6
+
+# CLASSIC, English: the characters must speak in the sober skin too.
+write32 $g_moku_test+76 0
+write32 $g_moku_test+72 4
+wait32 $g_moku_test+72 0 20
+frames 6
+write32 $g_moku_test+76 0
+write32 $g_moku_test+72 5
+wait32 $g_moku_test+72 0 20
+frames 6
+
+echo 19x19 against TENGEN (MASTER), we are black
+write32 $g_moku_test+76 0xF00413
+write32 $g_moku_test+72 3
+wait32 $g_moku_test+72 0 30
+frames 6
+assert8 $g_moku_test+8 5
+assert8 $g_moku_test+15 19
+assert8 $g_moku_test+29 4
+assert8 $g_moku_test+152 0
+
+echo our first move makes the opponent introduce itself
+write32 $g_moku_test+76 0x0303
+write32 $g_moku_test+72 16
+wait32 $g_moku_test+72 0 20
+frames 8
+assert8 $g_moku_test+154 1
+assert8 $g_moku_test+152 1
+# bit2 of event_flags is the pop-in
+wait8 $g_moku_test+30 1 120
+frames 4
+screenshot tests/rom/out/20_intro.png
+
+echo the debug overlay: L+R+SELECT
+hold L
+hold R
+press SELECT 2 8
+release L
+release R
+frames 6
+assert8 $g_moku_test+153 1
+screenshot tests/rom/out/20_overlay.png
+hold L
+hold R
+press SELECT 2 8
+release L
+release R
+frames 6
+assert8 $g_moku_test+153 0
+
+echo put a white stone in the corner and take it
+# the opponent is still thinking, so this plays for white
+write32 $g_moku_test+76 0x0000
+write32 $g_moku_test+72 16
+wait32 $g_moku_test+72 0 20
+frames 6
+assert8 $g_moku_test+16 1
+
+# black at (1,0): the corner stone is down to one liberty
+write32 $g_moku_test+76 0x0001
+write32 $g_moku_test+72 16
+wait32 $g_moku_test+72 0 20
+frames 8
+wait8 $g_moku_test+30 1 120
+
+# white far away, then black at (0,1) captures
+write32 $g_moku_test+76 0x1212
+write32 $g_moku_test+72 16
+wait32 $g_moku_test+72 0 20
+frames 6
+write32 $g_moku_test+76 0x0100
+write32 $g_moku_test+72 16
+wait32 $g_moku_test+72 0 20
+frames 10
+assert16 $g_moku_test+22 1
+# SAY_*_CAPTURED = index 2, so reserved[10] is 3 and bit 2 latches
+assert8 $g_moku_test+154 3
+read8 $g_moku_test+152
+screenshot tests/rom/out/20_captured.png
+
+echo the same game in French, from the intro to the capture
+write32 $g_moku_test+76 1
+write32 $g_moku_test+72 4
+wait32 $g_moku_test+72 0 20
+frames 6
+write32 $g_moku_test+76 0xF00413
+write32 $g_moku_test+72 3
+wait32 $g_moku_test+72 0 30
+frames 6
+assert8 $g_moku_test+152 0
+write32 $g_moku_test+76 0x0303
+write32 $g_moku_test+72 16
+wait32 $g_moku_test+72 0 20
+frames 8
+assert8 $g_moku_test+154 1
+wait8 $g_moku_test+30 1 120
+frames 4
+screenshot tests/rom/out/20_intro_fr.png
+write32 $g_moku_test+76 0x0000
+write32 $g_moku_test+72 16
+wait32 $g_moku_test+72 0 20
+frames 6
+write32 $g_moku_test+76 0x0001
+write32 $g_moku_test+72 16
+wait32 $g_moku_test+72 0 20
+frames 8
+wait8 $g_moku_test+30 1 120
+write32 $g_moku_test+76 0x1212
+write32 $g_moku_test+72 16
+wait32 $g_moku_test+72 0 20
+frames 6
+write32 $g_moku_test+76 0x0100
+write32 $g_moku_test+72 16
+wait32 $g_moku_test+72 0 20
+frames 10
+assert16 $g_moku_test+22 1
+assert8 $g_moku_test+154 3
+screenshot tests/rom/out/20_captured_fr.png
+write32 $g_moku_test+76 0
+write32 $g_moku_test+72 4
+wait32 $g_moku_test+72 0 20
+frames 6
+
+echo no frame may be missed while the board is ours
+wait8 $g_moku_test+30 0 1200
+write32 $g_moku_test+72 9
+wait32 $g_moku_test+72 0 20
+frames 6
+frames 150
+assert16 $g_moku_test+38 0
+read32 $g_moku_test+84
+stats

@@ -1,0 +1,103 @@
+# Saving: settings and campaign progress survive a reboot, and wiping really wipes.
+symbols build/moku.sym
+wait8 $g_moku_test+8 1 120
+frames 20
+
+echo start from an empty SRAM
+write32 $g_moku_test+72 14
+wait32 $g_moku_test+72 0 30
+frames 6
+reset
+wait8 $g_moku_test+8 1 180
+assert8 $g_moku_test+10 0
+assert8 $g_moku_test+48 0
+
+echo change every option, clear a mission, then save
+write32 $g_moku_test+76 1
+write32 $g_moku_test+72 4
+wait32 $g_moku_test+72 0 20
+frames 6
+write32 $g_moku_test+76 2
+write32 $g_moku_test+72 5
+wait32 $g_moku_test+72 0 20
+frames 6
+write32 $g_moku_test+76 1
+write32 $g_moku_test+72 6
+wait32 $g_moku_test+72 0 20
+frames 6
+write32 $g_moku_test+76 0
+write32 $g_moku_test+72 7
+wait32 $g_moku_test+72 0 20
+frames 6
+write32 $g_moku_test+76 1
+write32 $g_moku_test+72 13
+wait32 $g_moku_test+72 0 20
+frames 6
+
+# clear mission 1 for real: load it and place the three marked stones
+write32 $g_moku_test+76 1
+write32 $g_moku_test+72 2
+wait32 $g_moku_test+72 0 40
+frames 6
+write32 $g_moku_test+72 12
+wait32 $g_moku_test+72 0 20
+frames 6
+write32 $g_moku_test+76 0x0102
+write32 $g_moku_test+72 16
+wait32 $g_moku_test+72 0 40
+frames 6
+write32 $g_moku_test+76 0x0303
+write32 $g_moku_test+72 16
+wait32 $g_moku_test+72 0 40
+frames 6
+write32 $g_moku_test+76 0x0504
+write32 $g_moku_test+72 16
+wait32 $g_moku_test+72 0 40
+frames 6
+frames 90
+assert8 $g_moku_test+27 1
+# the tutor's win line holds the board screen: skip it so the clear screen records the progress
+write32 $g_moku_test+72 12
+wait32 $g_moku_test+72 0 20
+frames 6
+frames 60
+assert8 $g_moku_test+48 1
+write32 $g_moku_test+72 20
+wait32 $g_moku_test+72 0 30
+frames 6
+sram_save tests/rom/out/16_save.sav
+
+echo reboot: everything must come back
+reset
+wait8 $g_moku_test+8 1 180
+frames 30
+assert8 $g_moku_test+10 1
+assert8 $g_moku_test+11 2
+assert8 $g_moku_test+12 1
+assert8 $g_moku_test+13 0
+assert8 $g_moku_test+14 1
+assert8 $g_moku_test+48 1
+assert8 $g_moku_test+49 4
+
+echo wipe: back to defaults
+write32 $g_moku_test+72 14
+wait32 $g_moku_test+72 0 30
+frames 6
+reset
+wait8 $g_moku_test+8 1 180
+frames 30
+assert8 $g_moku_test+10 0
+assert8 $g_moku_test+11 0
+assert8 $g_moku_test+48 0
+
+echo a saved file loaded from disk is honoured
+sram_load tests/rom/out/16_save.sav
+reset
+wait8 $g_moku_test+8 1 180
+frames 30
+assert8 $g_moku_test+10 1
+assert8 $g_moku_test+48 1
+write32 $g_moku_test+72 14
+wait32 $g_moku_test+72 0 30
+frames 6
+stats

@@ -1,0 +1,187 @@
+# A whole 9x9 game against every opponent, under both rulesets, played to its score screen.
+#
+# The moves come from TCMD_AUTOPLAY (22), which plays both sides with the policy a simulation uses:
+# the point is that the game reaches the end - passes, the marking phase, the score - against each
+# level and each ruleset, not that the moves are good. Real games against these opponents are what
+# the strength ladder in TEST_REPORT.md measures, and five seconds a move is not a test suite.
+symbols build/moku.sym
+wait8 $g_moku_test+8 1 120
+frames 20
+write32 $g_moku_test+72 8
+wait32 $g_moku_test+72 0 20
+frames 6
+
+echo 9x9 area scoring against PEBBLE (VERY EASY)
+write32 $g_moku_test+76 0xF00011
+write32 $g_moku_test+72 3
+wait32 $g_moku_test+72 0 30
+frames 6
+assert8 $g_moku_test+15 9
+assert8 $g_moku_test+29 0
+write32 $g_moku_test+76 400
+write32 $g_moku_test+72 22
+wait32 $g_moku_test+72 0 600
+frames 10
+# phase 1 = the marking phase: the game ended on two passes
+assert8 $g_moku_test+17 1
+press START 2 40
+frames 60
+assert8 $g_moku_test+8 10
+
+echo 9x9 area scoring against SPROUT (EASY)
+write32 $g_moku_test+76 0xF00111
+write32 $g_moku_test+72 3
+wait32 $g_moku_test+72 0 30
+frames 6
+assert8 $g_moku_test+15 9
+assert8 $g_moku_test+29 1
+write32 $g_moku_test+76 400
+write32 $g_moku_test+72 22
+wait32 $g_moku_test+72 0 600
+frames 10
+# phase 1 = the marking phase: the game ended on two passes
+assert8 $g_moku_test+17 1
+press START 2 40
+frames 60
+assert8 $g_moku_test+8 10
+
+echo 9x9 area scoring against KOAN (NORMAL)
+write32 $g_moku_test+76 0xF00211
+write32 $g_moku_test+72 3
+wait32 $g_moku_test+72 0 30
+frames 6
+assert8 $g_moku_test+15 9
+assert8 $g_moku_test+29 2
+write32 $g_moku_test+76 400
+write32 $g_moku_test+72 22
+wait32 $g_moku_test+72 0 600
+frames 10
+# phase 1 = the marking phase: the game ended on two passes
+assert8 $g_moku_test+17 1
+press START 2 40
+frames 60
+assert8 $g_moku_test+8 10
+
+echo 9x9 area scoring against EMBER (HARD)
+write32 $g_moku_test+76 0xF00311
+write32 $g_moku_test+72 3
+wait32 $g_moku_test+72 0 30
+frames 6
+assert8 $g_moku_test+15 9
+assert8 $g_moku_test+29 3
+write32 $g_moku_test+76 400
+write32 $g_moku_test+72 22
+wait32 $g_moku_test+72 0 600
+frames 10
+# phase 1 = the marking phase: the game ended on two passes
+assert8 $g_moku_test+17 1
+press START 2 40
+frames 60
+assert8 $g_moku_test+8 10
+
+echo 9x9 area scoring against TENGEN (MASTER)
+write32 $g_moku_test+76 0xF00411
+write32 $g_moku_test+72 3
+wait32 $g_moku_test+72 0 30
+frames 6
+assert8 $g_moku_test+15 9
+assert8 $g_moku_test+29 4
+write32 $g_moku_test+76 400
+write32 $g_moku_test+72 22
+wait32 $g_moku_test+72 0 600
+frames 10
+# phase 1 = the marking phase: the game ended on two passes
+assert8 $g_moku_test+17 1
+press START 2 40
+frames 60
+assert8 $g_moku_test+8 10
+
+echo 9x9 territory scoring against PEBBLE (VERY EASY)
+write32 $g_moku_test+76 0xD10011
+write32 $g_moku_test+72 3
+wait32 $g_moku_test+72 0 30
+frames 6
+assert8 $g_moku_test+15 9
+assert8 $g_moku_test+29 0
+write32 $g_moku_test+76 400
+write32 $g_moku_test+72 22
+wait32 $g_moku_test+72 0 600
+frames 10
+# phase 1 = the marking phase: the game ended on two passes
+assert8 $g_moku_test+17 1
+press START 2 40
+frames 60
+assert8 $g_moku_test+8 10
+
+echo 9x9 territory scoring against SPROUT (EASY)
+write32 $g_moku_test+76 0xD10111
+write32 $g_moku_test+72 3
+wait32 $g_moku_test+72 0 30
+frames 6
+assert8 $g_moku_test+15 9
+assert8 $g_moku_test+29 1
+write32 $g_moku_test+76 400
+write32 $g_moku_test+72 22
+wait32 $g_moku_test+72 0 600
+frames 10
+# phase 1 = the marking phase: the game ended on two passes
+assert8 $g_moku_test+17 1
+press START 2 40
+frames 60
+assert8 $g_moku_test+8 10
+
+echo 9x9 territory scoring against KOAN (NORMAL)
+write32 $g_moku_test+76 0xD10211
+write32 $g_moku_test+72 3
+wait32 $g_moku_test+72 0 30
+frames 6
+assert8 $g_moku_test+15 9
+assert8 $g_moku_test+29 2
+write32 $g_moku_test+76 400
+write32 $g_moku_test+72 22
+wait32 $g_moku_test+72 0 600
+frames 10
+# phase 1 = the marking phase: the game ended on two passes
+assert8 $g_moku_test+17 1
+press START 2 40
+frames 60
+assert8 $g_moku_test+8 10
+
+echo 9x9 territory scoring against EMBER (HARD)
+write32 $g_moku_test+76 0xD10311
+write32 $g_moku_test+72 3
+wait32 $g_moku_test+72 0 30
+frames 6
+assert8 $g_moku_test+15 9
+assert8 $g_moku_test+29 3
+write32 $g_moku_test+76 400
+write32 $g_moku_test+72 22
+wait32 $g_moku_test+72 0 600
+frames 10
+# phase 1 = the marking phase: the game ended on two passes
+assert8 $g_moku_test+17 1
+press START 2 40
+frames 60
+assert8 $g_moku_test+8 10
+
+echo 9x9 territory scoring against TENGEN (MASTER)
+write32 $g_moku_test+76 0xD10411
+write32 $g_moku_test+72 3
+wait32 $g_moku_test+72 0 30
+frames 6
+assert8 $g_moku_test+15 9
+assert8 $g_moku_test+29 4
+write32 $g_moku_test+76 400
+write32 $g_moku_test+72 22
+wait32 $g_moku_test+72 0 600
+frames 10
+# phase 1 = the marking phase: the game ended on two passes
+assert8 $g_moku_test+17 1
+press START 2 40
+frames 60
+assert8 $g_moku_test+8 10
+
+screenshot tests/rom/out/24_score.png
+press A 2 30
+frames 20
+stats

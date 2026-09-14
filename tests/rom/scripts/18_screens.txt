@@ -1,0 +1,157 @@
+# Every screen, in English and French, for the record shots in tests/rom/screenshots/.
+symbols build/moku.sym
+wait8 $g_moku_test+8 1 120
+frames 20
+write32 $g_moku_test+72 8
+wait32 $g_moku_test+72 0 20
+frames 6
+
+# clear mission 1 so the clear screen has something to show
+write32 $g_moku_test+76 1
+write32 $g_moku_test+72 2
+wait32 $g_moku_test+72 0 40
+frames 6
+write32 $g_moku_test+72 12
+wait32 $g_moku_test+72 0 20
+frames 6
+write32 $g_moku_test+76 0x0102
+write32 $g_moku_test+72 16
+wait32 $g_moku_test+72 0 40
+write32 $g_moku_test+76 0x0303
+write32 $g_moku_test+72 16
+wait32 $g_moku_test+72 0 40
+write32 $g_moku_test+76 0x0504
+write32 $g_moku_test+72 16
+wait32 $g_moku_test+72 0 40
+frames 40
+write32 $g_moku_test+72 12
+wait32 $g_moku_test+72 0 20
+frames 6
+frames 60
+assert8 $g_moku_test+8 6
+frames 30
+screenshot tests/rom/screenshots/07_mission_clear.png
+
+# title, save select, map, briefing
+write32 $g_moku_test+76 1
+write32 $g_moku_test+72 18
+wait32 $g_moku_test+72 0 20
+frames 30
+screenshot tests/rom/screenshots/01_title.png
+write32 $g_moku_test+76 2
+write32 $g_moku_test+72 18
+wait32 $g_moku_test+72 0 20
+frames 10
+screenshot tests/rom/screenshots/02_save_select.png
+write32 $g_moku_test+76 3
+write32 $g_moku_test+72 18
+wait32 $g_moku_test+72 0 20
+frames 20
+screenshot tests/rom/screenshots/03_campaign_map.png
+write32 $g_moku_test+76 4
+write32 $g_moku_test+72 18
+wait32 $g_moku_test+72 0 20
+frames 120
+screenshot tests/rom/screenshots/04_briefing.png
+
+# the board: mission 7, classic
+write32 $g_moku_test+76 7
+write32 $g_moku_test+72 2
+wait32 $g_moku_test+72 0 40
+frames 6
+write32 $g_moku_test+72 12
+wait32 $g_moku_test+72 0 20
+frames 20
+screenshot tests/rom/screenshots/05_play_classic.png
+press START 2 10
+frames 6
+screenshot tests/rom/screenshots/06_pause.png
+press START 2 10
+
+# sandbox, opponent, options
+write32 $g_moku_test+76 7
+write32 $g_moku_test+72 18
+wait32 $g_moku_test+72 0 20
+frames 10
+screenshot tests/rom/screenshots/08_sandbox.png
+write32 $g_moku_test+76 8
+write32 $g_moku_test+72 18
+wait32 $g_moku_test+72 0 20
+frames 20
+screenshot tests/rom/screenshots/09_choose_opponent.png
+write32 $g_moku_test+76 9
+write32 $g_moku_test+72 18
+wait32 $g_moku_test+72 0 20
+frames 10
+screenshot tests/rom/screenshots/10_options.png
+
+# the two juicy skins on the board
+write32 $g_moku_test+76 7
+write32 $g_moku_test+72 2
+wait32 $g_moku_test+72 0 40
+frames 6
+write32 $g_moku_test+72 12
+wait32 $g_moku_test+72 0 20
+write32 $g_moku_test+76 1
+write32 $g_moku_test+72 5
+wait32 $g_moku_test+72 0 20
+frames 20
+screenshot tests/rom/screenshots/11_play_pup.png
+write32 $g_moku_test+76 2
+write32 $g_moku_test+72 5
+wait32 $g_moku_test+72 0 20
+frames 20
+screenshot tests/rom/screenshots/12_play_dino.png
+write32 $g_moku_test+76 0
+write32 $g_moku_test+72 5
+wait32 $g_moku_test+72 0 20
+
+# French
+write32 $g_moku_test+76 1
+write32 $g_moku_test+72 4
+wait32 $g_moku_test+72 0 20
+frames 6
+write32 $g_moku_test+76 4
+write32 $g_moku_test+72 18
+wait32 $g_moku_test+72 0 20
+frames 120
+screenshot tests/rom/screenshots/13_briefing_fr.png
+write32 $g_moku_test+76 9
+write32 $g_moku_test+72 18
+wait32 $g_moku_test+72 0 20
+frames 10
+screenshot tests/rom/screenshots/14_options_fr.png
+write32 $g_moku_test+76 7
+write32 $g_moku_test+72 2
+wait32 $g_moku_test+72 0 40
+frames 6
+write32 $g_moku_test+72 12
+wait32 $g_moku_test+72 0 20
+frames 20
+screenshot tests/rom/screenshots/15_play_fr.png
+write32 $g_moku_test+76 0
+write32 $g_moku_test+72 4
+wait32 $g_moku_test+72 0 20
+frames 6
+
+echo the opponent speaking, and the debug overlay
+write32 $g_moku_test+76 0xF00413
+write32 $g_moku_test+72 3
+wait32 $g_moku_test+72 0 30
+frames 6
+write32 $g_moku_test+76 0x0303
+write32 $g_moku_test+72 16
+wait32 $g_moku_test+72 0 20
+wait8 $g_moku_test+30 1 120
+frames 6
+assert8 $g_moku_test+154 1
+screenshot tests/rom/screenshots/16_opponent_says.png
+hold L
+hold R
+press SELECT 2 8
+release L
+release R
+frames 20
+assert8 $g_moku_test+153 1
+screenshot tests/rom/screenshots/17_debug_overlay.png
+stats

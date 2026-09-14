@@ -1,0 +1,129 @@
+# The in-progress sandbox game: it survives the power going off mid-game, and comes back on the
+# same board, with the same komi, against the same opponent, at the same move.
+symbols build/moku.sym
+wait8 $g_moku_test+8 1 120
+frames 20
+write32 $g_moku_test+72 14
+wait32 $g_moku_test+72 0 30
+frames 6
+reset
+wait8 $g_moku_test+8 1 180
+write32 $g_moku_test+72 8
+wait32 $g_moku_test+72 0 20
+frames 6
+
+echo a 9x9 game against SPROUT, territory scoring, three moves each
+# size 1 (9x9) | black | level 1 | handicap 0 | rules 1 (territory) | komi 13 -> 6.5
+write32 $g_moku_test+76 0xD10111
+write32 $g_moku_test+72 3
+wait32 $g_moku_test+72 0 30
+frames 6
+assert8 $g_moku_test+8 5
+assert8 $g_moku_test+15 9
+
+write32 $g_moku_test+76 0x0202
+write32 $g_moku_test+72 16
+wait32 $g_moku_test+72 0 20
+wait8 $g_moku_test+30 0 400
+write32 $g_moku_test+76 0x0206
+write32 $g_moku_test+72 16
+wait32 $g_moku_test+72 0 20
+wait8 $g_moku_test+30 0 400
+write32 $g_moku_test+76 0x0606
+write32 $g_moku_test+72 16
+wait32 $g_moku_test+72 0 20
+wait8 $g_moku_test+30 0 400
+frames 10
+assert16 $g_moku_test+20 6
+screenshot tests/rom/out/22_before.png
+
+echo leaving the board writes the game to SRAM
+write32 $g_moku_test+72 1
+wait32 $g_moku_test+72 0 30
+frames 20
+assert8 $g_moku_test+8 1
+assert8 $g_moku_test+69 1
+sram_save tests/rom/out/22_resume.sav
+
+echo the console is switched off and on again
+reset
+wait8 $g_moku_test+8 1 180
+sram_load tests/rom/out/22_resume.sav
+reset
+wait8 $g_moku_test+8 1 180
+frames 10
+
+echo the sandbox screen now offers RESUME as its tenth row
+write32 $g_moku_test+72 8
+wait32 $g_moku_test+72 0 20
+frames 6
+write32 $g_moku_test+76 7
+write32 $g_moku_test+72 18
+wait32 $g_moku_test+72 0 20
+frames 10
+assert8 $g_moku_test+8 7
+assert8 $g_moku_test+69 1
+screenshot tests/rom/out/22_sandbox_resume.png
+press DOWN 2 6
+press DOWN 2 6
+press DOWN 2 6
+press DOWN 2 6
+press DOWN 2 6
+press DOWN 2 6
+press DOWN 2 6
+press DOWN 2 6
+press DOWN 2 6
+assert8 $g_moku_test+126 9
+press A 2 40
+
+echo and the game comes back exactly as it was
+assert8 $g_moku_test+8 5
+assert8 $g_moku_test+15 9
+assert16 $g_moku_test+20 6
+assert8 $g_moku_test+140 1
+frames 20
+screenshot tests/rom/out/22_after.png
+
+echo a game played to its end clears the saved record
+# hot seat, so both passes are ours and the game really reaches the score screen
+write32 $g_moku_test+76 0x10000011
+write32 $g_moku_test+72 3
+wait32 $g_moku_test+72 0 30
+frames 6
+assert8 $g_moku_test+8 5
+write32 $g_moku_test+76 0x0404
+write32 $g_moku_test+72 16
+wait32 $g_moku_test+72 0 20
+frames 10
+write32 $g_moku_test+72 17
+wait32 $g_moku_test+72 0 40
+frames 20
+write32 $g_moku_test+72 17
+wait32 $g_moku_test+72 0 40
+frames 40
+assert8 $g_moku_test+17 1
+press START 2 30
+frames 60
+assert8 $g_moku_test+8 10
+assert8 $g_moku_test+69 0
+
+echo so the sandbox screen is back to the nine rows of the mockup
+press A 2 40
+frames 20
+write32 $g_moku_test+76 7
+write32 $g_moku_test+72 18
+wait32 $g_moku_test+72 0 20
+frames 10
+assert8 $g_moku_test+8 7
+assert8 $g_moku_test+69 0
+press DOWN 2 6
+press DOWN 2 6
+press DOWN 2 6
+press DOWN 2 6
+press DOWN 2 6
+press DOWN 2 6
+press DOWN 2 6
+press DOWN 2 6
+assert8 $g_moku_test+126 8
+screenshot tests/rom/out/22_sandbox_no_resume.png
+stats

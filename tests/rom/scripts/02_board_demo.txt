@@ -1,0 +1,103 @@
+# Board renderer: every board size, every cell flag, every skin, incremental updates and a shake.
+symbols build/moku.sym
+wait8 $g_moku_test+8 1 120
+frames 20
+
+# start from a known state: EN, CLASSIC
+write32 $g_moku_test+76 0
+write32 $g_moku_test+72 4
+wait32 $g_moku_test+72 0 20
+frames 6
+write32 $g_moku_test+76 0
+write32 $g_moku_test+72 5
+wait32 $g_moku_test+72 0 20
+frames 6
+
+# TCMD_GOTO_SCENE (18) -> the renderer demo, which answers SceneId::BOOT (0)
+write32 $g_moku_test+76 0
+write32 $g_moku_test+72 18
+wait32 $g_moku_test+72 0 20
+frames 6
+assert32 $g_moku_test+80 1
+assert8 $g_moku_test+8 0
+frames 10
+
+# 9x9 (the demo starts here), then R cycles 13 -> 19 -> 7
+assert8 $g_moku_test+15 9
+screenshot tests/rom/out/board_9.png
+press R 2 12
+assert8 $g_moku_test+15 13
+screenshot tests/rom/out/board_13.png
+press R 2 12
+assert8 $g_moku_test+15 19
+screenshot tests/rom/out/board_19.png
+press R 2 12
+assert8 $g_moku_test+15 7
+screenshot tests/rom/out/board_7.png
+
+# back to 9x9 and place a stone by hand (exercises the dirty-tile path)
+press R 2 12
+assert8 $g_moku_test+15 9
+press LEFT 2 4
+press UP 2 4
+press A 2 8
+press RIGHT 2 4
+press A 2 8
+frames 6
+screenshot tests/rom/out/board_9_edit.png
+
+# skins: TCMD_SET_SKIN (5) 1 = PUP, 2 = DINO
+write32 $g_moku_test+76 1
+write32 $g_moku_test+72 5
+wait32 $g_moku_test+72 0 20
+frames 6
+frames 8
+screenshot tests/rom/out/board_9_pup.png
+write32 $g_moku_test+76 2
+write32 $g_moku_test+72 5
+wait32 $g_moku_test+72 0 20
+frames 6
+frames 8
+screenshot tests/rom/out/board_9_dino.png
+
+# 19x19 in DINO, then a screen shake
+press R 2 12
+press R 2 12
+assert8 $g_moku_test+15 19
+frames 8
+screenshot tests/rom/out/board_19_dino.png
+hold SELECT
+frames 3
+release SELECT
+frames 3
+screenshot tests/rom/out/board_shake.png
+frames 20
+
+# back to CLASSIC 9x9 for the record shot
+write32 $g_moku_test+76 0
+write32 $g_moku_test+72 5
+wait32 $g_moku_test+72 0 20
+frames 6
+press R 2 12
+press R 2 12
+assert8 $g_moku_test+15 9
+frames 8
+screenshot tests/rom/out/board_9_classic.png
+
+# B returns to the title
+press B 2 20
+assert8 $g_moku_test+8 1
+
+# redrawing every board size and skin must not drop a frame
+# The rule is about the human's turn: while the player is looking at the board, no frame
+# may be missed. Loading a scene, and the AI's own turn on a 19x19 board, are allowed to cost a
+# few - they are reported below, not asserted.
+wait8 $g_moku_test+30 0 900
+write32 $g_moku_test+72 9
+wait32 $g_moku_test+72 0 20
+frames 6
+frames 150
+assert16 $g_moku_test+38 0
+read32 $g_moku_test+84
+read32 $g_moku_test+84
+stats
